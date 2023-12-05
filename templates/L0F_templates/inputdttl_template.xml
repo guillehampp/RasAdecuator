@@ -1,0 +1,5 @@
+    <parameter>
+      <name>Acquisition Timeline Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/L0F01/workspace/inputDir/INPUTDTTLNAME</value>
+    </parameter>

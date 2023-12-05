@@ -1,0 +1,7 @@
+workspace_template_dir: "templates/inputWorkspacesTemplate"
+TMD_template_dir: "templates/TMD_template"
+L0F_Templates_Dir: "templates/L0F_templates"
+workspace_tmd_input: "workspaceTMD/inputDir"
+workspace_tmd_output: "workspaceTMD/outputDir"
+workspace_l0f_input: "workspaceL0F/inputDir"
+workspace_l0f_output: "workspaceL0F/outputDir"

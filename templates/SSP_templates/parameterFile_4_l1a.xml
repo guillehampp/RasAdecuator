@@ -1,0 +1,18 @@
+    <output>
+      <name>SAOCOM SAR L1A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1A Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1A Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>

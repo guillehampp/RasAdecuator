@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters xmlns="http://www.conae.gov.ar/CGSS/XPNet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <inputs>
+    <parameter>
+      <name>Associated Telemetry Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/L0F01/workspace/inputDir/decodedtmy.xemt</value>
+    </parameter>

@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<parameters xmlns="http://www.conae.gov.ar/CGSS/XPNet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="parameterFile.xsd">
+  <inputs>
+    <parameter>
+      <name>SAOCOM SAR L0A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/l0a.xemt</value>
+    </parameter>
+    <parameter>
+      <name>Data To Skip</name>
+      <type>XPNetIntegerNotTimeTagged</type>
+      <value>55</value>
+    </parameter>
+    <parameter>
+      <name>Data To Process</name>
+      <type>XPNetIntegerNotTimeTagged</type>
+      <value>5</value>
+    </parameter>
+  </inputs>
+  <workDirectory>/opt/sao/appsharedfiles/SSP01/workspace</workDirectory>
+  <outputs>
+    <output>
+      <name>SAOCOM SAR L1A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1A Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1A Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1B Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1b.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1B Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1b_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1B Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1b_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1C Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1C Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1C Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1D Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1D Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1D Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+  </outputs>
+</parameters>
