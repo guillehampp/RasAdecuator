@@ -5,7 +5,7 @@ from Log import Log
 from FileHandler import FileHandler
 from ArgumentHandler import ArgumentHandler
 from ProcessTMD import ProcessTMD
-import shutil
+from ProcessL0 import ProcessL0
 
 
 log_adec = Log(__name__)
@@ -18,19 +18,10 @@ def load_config():
         raise
     loader = YamlLoader(pat_yaml)
     return loader.load()
-# def check_workdir_folders(directory):
-#     if not os.path.exists(directory):
-#         for name in os.listdir(directory):
-#             if name.startswith("workdir"):
-#                 folder_path = os.path.join(directory, name)
-#                 if os.path.exists(folder_path):
-#                     log_adec.error(f"La carpeta {folder_path} existe")
-#                 else:
-#                     return True
-#     else:
-#         return True
+
 def check_tar_exists(workdir):
-    tar_files = glob.glob(os.path.join(workdir, "*.tar"))
+    workspaces = os.path.join(workdir,'workspaceTMD','inputDir')
+    tar_files = glob.glob(os.path.join(workspaces, "*.tar"))
     return tar_files
 
 def crea_estructura(config_params, path_to_adq):
@@ -77,6 +68,19 @@ def adec_xemtmd(path_to_adq,config_params,adquisition):
     adec_tmd = ProcessTMD(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
     adec_tmd.adec_xemtmd()
     
+def adec_l0f(path_to_adq,input_l0f):
+    adec_l0f = ProcessL0(workspace_path=path_to_adq,temporal_parameterFile="temporal_parameterFile",parameterFile="parameterFile")
+    dttl_files = adec_l0f.find_files('_DTTL__')
+    destination_folder = os.path.join(path_to_adq,input_l0f)
+    adec_l0f.move_files(dttl_files,destination_folder)
+    ras_list = adec_l0f.ras_files()
+    adec_l0f.move_files(ras_list,destination_folder)
+
+    
+def adec_l0f_xemt(path_to_adq,config_params,adquisition):
+    adec_l0f = ProcessL0(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
+    adec_l0f.adec_xeml0f()
+    adec_l0f.process_files()
     
 def main():
     log_adec.info("Start Adecuator")
@@ -88,12 +92,13 @@ def main():
     #template_dir = os.path.join(WORKDIR, config_params.get('TMD_template_dir'))
     acquisition_folder = file_handler.open_txt_(args.lista_adquisiciones)
     for adquisition in acquisition_folder:
-        #file_handler.create_adq_folder(adquisition)
+        file_handler.create_adq_folder(adquisition)
         path_to_adq = os.path.join(args.path, adquisition)
         process_adquisition(config_params, path_to_adq)
         prepare_input(path_to_adq,config_params.get('workspace_tmd_input'))
         adec_tmd(path_to_adq,config_params.get('workspace_tmd_input'))
         adec_xemtmd(path_to_adq,config_params,adquisition)
-        
+        adec_l0f(path_to_adq,config_params.get('workspace_l0f_input'))
+        adec_l0f_xemt(path_to_adq,config_params,adquisition)
 if __name__ == '__main__':
     main()
