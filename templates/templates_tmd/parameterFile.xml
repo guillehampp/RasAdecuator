@@ -1,3 +1,18 @@
+<?xml version="1.0" ?>
+<parameters xmlns="http://www.conae.gov.ar/CGSS/XPNet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="parameterFile.xsd">
+  <inputs>
+    <parameter>
+      <name>CONFIG</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/TMD01/workspace/configFile.xml</value>
+    </parameter>
+    {% for param in parameters %}
+    <parameter>
+      <name>{{ param.name }}</name>
+      <type>{{ param.type }}</type>
+      <value>{{ param.value }}</value>
+    </parameter>
+    {% endfor %}
   </inputs>
   <workDirectory>/opt/sao/appsharedfiles/TMD01/workspace</workDirectory>
   <outputs>

@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<parameters xmlns="http://www.conae.gov.ar/CGSS/XPNet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="parameterFile.xsd">
+  <inputs>
+    <parameter>
+      <name>SAOCOM SAR L0A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/l0a.xemt</value>
+    </parameter>
+    <parameter>
+      <name>Data To Skip</name>
+      <type>XPNetIntegerNotTimeTagged</type>
+      <value>0</value>
+    </parameter>
+    <parameter>
+      <name>Data To Process</name>
+      <type>XPNetIntegerNotTimeTagged</type>
+      <value>100</value>
+    </parameter>
+  <parameter>
+        <name>Precision Attitude Product</name>
+        <type>XPNetStringNotTimeTagged</type>
+        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_QUATRN_CODS_20210610T132024_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt</value>
+    </parameter>
+    <parameter>
+        <name>Precision Orbit Product</name>
+        <type>XPNetStringNotTimeTagged</type>
+        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_EPHEMS_CODS_20210620T022318_DENSEORBEPHEM_MJ2K_XYZ_F_1.xemt</value>
+    </parameter>
+    <parameter>
+        <name>Total Electron Content CUSS Product</name>
+        <type>XPNetStringNotTimeTagged</type>
+        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_TECIGR_CORE_20210608T120000.xemt</value>
+    </parameter>
+    <parameter>
+        <name>Processor Configuration File</name>
+        <type>XPNetStringNotTimeTagged</type>
+        <value>/opt/sao/app/SSP/configFiles/L1PROCConf.SAS.ARG-1.xml</value>
+    </parameter>
+  </inputs>
+  <workDirectory>/opt/sao/appsharedfiles/SSP01/workspace</workDirectory>
+  <outputs>
+    <output>
+      <name>SAOCOM SAR L1A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1A Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1A Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1D Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1D Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1D Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+  </outputs>
+</parameters>

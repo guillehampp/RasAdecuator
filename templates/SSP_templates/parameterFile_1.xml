@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<parameters xmlns="http://www.conae.gov.ar/CGSS/XPNet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="parameterFile.xsd">
-  <inputs>
-    <parameter>
-      <name>SAOCOM SAR L0A Product</name>
-      <type>XPNetStringNotTimeTagged</type>
-      <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/l0a.xemt</value>
-    </parameter>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters xmlns="http://www.conae.gov.ar/CGSS/XPNet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <inputs>
+    <parameter>
+      <name>Associated Telemetry Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/L0F01/workspace/inputDir/decodedtmy.xemt</value>
+    </parameter>
+    {% for param in parameters %}
+    <parameter>
+      <name>{{ param.name }}</name>
+      <type>{{ param.type }}</type>
+      <value>{{ param.value }}</value>
+    </parameter>
+    {% endfor %}
+  </inputs>
+  <workDirectory>/opt/sao/appsharedfiles/L0F01/workspace</workDirectory>
+  <outputs>
+    <output>
+      <name>SAOCOM SAR L0A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>outputDir/l0a.xemt</value>
+    </output>
+    <output>
+      <name>SAOCOM SAR L0A Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>outputDir/l0a_QC.xemt</value>
+    </output>
+  </outputs>
+</parameters>
+

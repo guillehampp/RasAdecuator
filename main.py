@@ -6,7 +6,7 @@ from FileHandler import FileHandler
 from ArgumentHandler import ArgumentHandler
 from ProcessTMD import ProcessTMD
 from ProcessL0 import ProcessL0
-
+from ProcessSSP import ProcessSSP
 
 log_adec = Log(__name__)
 WORKDIR = os.path.dirname(os.path.abspath(__file__))
@@ -68,19 +68,20 @@ def adec_xemtmd(path_to_adq,config_params,adquisition):
     adec_tmd = ProcessTMD(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
     adec_tmd.adec_xemtmd()
     
-def adec_l0f(path_to_adq,input_l0f):
-    adec_l0f = ProcessL0(workspace_path=path_to_adq,temporal_parameterFile="temporal_parameterFile",parameterFile="parameterFile")
+def adec_l0f(path_to_adq,config_params,adquisition,input_l0f):
+    adec_l0f = ProcessL0(WORKDIR,config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
     dttl_files = adec_l0f.find_files('_DTTL__')
-    destination_folder = os.path.join(path_to_adq,input_l0f)
-    adec_l0f.move_files(dttl_files,destination_folder)
+    dttl_file = adec_l0f.get_recent_dttl(dttl_files)
     ras_list = adec_l0f.ras_files()
-    adec_l0f.move_files(ras_list,destination_folder)
-
-    
-def adec_l0f_xemt(path_to_adq,config_params,adquisition):
-    adec_l0f = ProcessL0(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
-    adec_l0f.adec_xeml0f()
-    adec_l0f.process_files()
+    adec_l0f.adec_xeml0f(ras_list,dttl_file)
+    #adec_l0f.move_files(ras_list,destination_folder)
+def adec_ssp(path_to_adq,config_params,adquisition,input_l0f):
+    adec_ssp = ProcessSSP(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
+    adec_ssp.adec_ssp()
+# def adec_l0f_xemt(path_to_adq,config_params,adquisition):
+#     adec_l0f = ProcessL0(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
+#     adec_l0f.adec_xeml0f()
+#     adec_l0f.process_files()
     
 def main():
     log_adec.info("Start Adecuator")
@@ -94,11 +95,12 @@ def main():
     for adquisition in acquisition_folder:
         file_handler.create_adq_folder(adquisition)
         path_to_adq = os.path.join(args.path, adquisition)
-        process_adquisition(config_params, path_to_adq)
-        prepare_input(path_to_adq,config_params.get('workspace_tmd_input'))
-        adec_tmd(path_to_adq,config_params.get('workspace_tmd_input'))
-        adec_xemtmd(path_to_adq,config_params,adquisition)
-        adec_l0f(path_to_adq,config_params.get('workspace_l0f_input'))
-        adec_l0f_xemt(path_to_adq,config_params,adquisition)
+        #process_adquisition(config_params, path_to_adq)
+        #prepare_input(path_to_adq,config_params.get('workspace_tmd_input'))
+        #adec_tmd(path_to_adq,config_params.get('workspace_tmd_input'))
+        #adec_xemtmd(path_to_adq,config_params,adquisition)
+        #adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
+        adec_ssp(path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
+        #adec_l0f_xemt(path_to_adq,config_params,adquisition)
 if __name__ == '__main__':
     main()

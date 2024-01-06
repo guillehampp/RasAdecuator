@@ -1,5 +1,0 @@
-    <parameter>
-      <name>Data To Process</name>
-      <type>XPNetIntegerNotTimeTagged</type>
-      <value>100</value>
-    </parameter>

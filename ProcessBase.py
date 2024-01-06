@@ -20,7 +20,7 @@ class ProcessBase:
             f.write(self.temporal_parameterFile)
 
     def find_files(self, file_extension):
-        return sorted(glob.glob(os.path.join(self.workspace_path, f'*{file_extension}*')))
+        return sorted(glob.glob(os.path.join(self.path_to_adq, f'*{file_extension}*')))
 
     def move_files(self, files, destination_folder):
         for v_file in files:

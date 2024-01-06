@@ -1,5 +1,0 @@
-    <parameter>
-      <name>Data To Skip</name>
-      <type>XPNetIntegerNotTimeTagged</type>
-      <value>0</value>
-    </parameter>
