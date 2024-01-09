@@ -18,6 +18,11 @@ def load_config():
         raise
     loader = YamlLoader(pat_yaml)
     return loader.load()
+def get_sat_platform(path_to_adq):
+    get_dtt_file = glob.glob(os.path.join(path_to_adq, '*DTTL*'))
+    for dtt_file in get_dtt_file:
+        platform = os.path.basename(dtt_file).split('_')[0]
+        return platform
 
 def check_tar_exists(workdir):
     workspaces = os.path.join(workdir,'workspaceTMD','inputDir')
@@ -75,9 +80,9 @@ def adec_l0f(path_to_adq,config_params,adquisition,input_l0f):
     ras_list = adec_l0f.ras_files()
     adec_l0f.adec_xeml0f(ras_list,dttl_file)
     #adec_l0f.move_files(ras_list,destination_folder)
-def adec_ssp(path_to_adq,config_params,adquisition,input_l0f):
+def adec_ssp(platform,path_to_adq,config_params,adquisition,input_l0f):
     adec_ssp = ProcessSSP(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
-    adec_ssp.adec_ssp()
+    adec_ssp.adec_ssp_parametter_file(platform)
 # def adec_l0f_xemt(path_to_adq,config_params,adquisition):
 #     adec_l0f = ProcessL0(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
 #     adec_l0f.adec_xeml0f()
@@ -95,12 +100,13 @@ def main():
     for adquisition in acquisition_folder:
         file_handler.create_adq_folder(adquisition)
         path_to_adq = os.path.join(args.path, adquisition)
+        platform = get_sat_platform(path_to_adq)
         #process_adquisition(config_params, path_to_adq)
         #prepare_input(path_to_adq,config_params.get('workspace_tmd_input'))
         #adec_tmd(path_to_adq,config_params.get('workspace_tmd_input'))
         #adec_xemtmd(path_to_adq,config_params,adquisition)
         #adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
-        adec_ssp(path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
+        adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
         #adec_l0f_xemt(path_to_adq,config_params,adquisition)
 if __name__ == '__main__':
     main()
