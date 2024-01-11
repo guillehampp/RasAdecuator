@@ -1,0 +1,5 @@
+    <parameter>
+      <name>TMBIN</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/TMD01/workspace/inputDir/INPUTXEMTNAME</value>
+    </parameter>

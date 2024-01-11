@@ -13,11 +13,11 @@ class ProcessL0(ProcessBase):
     def __init__(self, workspace_path, temporal_parameterFile=None, parameterFile=None, config_params = None,adq_id = None, path_to_adq = None):
         super().__init__(workspace_path, temporal_parameterFile, parameterFile, config_params,adq_id, path_to_adq)
     
-    def ras_files(self):
+    def ras_files(self,path_to_files):
  
         
         # Busca todos los archivos que contienen "VC" en su nombre
-        files_vc = glob.glob(os.path.join(self.path_to_adq, '*VC*'))
+        files_vc = glob.glob(os.path.join(path_to_files, '*VC*'))
         
         # Filtra la lista para excluir los archivos que contienen "VC0" en su nombre
         files = [file for file in files_vc if "VC0" not in file]
@@ -33,24 +33,25 @@ class ProcessL0(ProcessBase):
         # Encuentra el archivo con el valor máximo en la posición 11 después de dividir el nombre del archivo
         dttl_file = max(xemt_files, key=lambda filename: re.split("_", filename)[10])
 
-        return os.path.basename(dttl_file)
+        return dttl_file
 
+    def move_input_file(self,ras_files, dtt_file):
+        destination_folder = os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input') )
+        self.move_files(ras_files,destination_folder)
+        self.move_files(dtt_file,destination_folder )
         
-    def adec_xeml0f(self,ras_files, dtt_file):
-        # Obtén las rutas a los directorios y archivos necesarios
-        #l0f_template_dir = os.path.join(self.workspace_path, self.config_params.get('L0F_Templates_Dir'))
-        #path_workspace_lof = os.path.join(self.workspace_path, self.adq_id, self.config_params.get('workspace_l0f_input'))
+    def adec_xeml0f(self):
+
         lista_vc_xemt = []
-        #ruta_dttl_tamplate =  os.path.join(l0f_template_dir, "inputdttl_template.xml")
-        for filename in ras_files:
+        get_ras_files = self.ras_files(os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input')))
+        get_dttl_file = self.find_files('_DTTL__',os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input')) )
+        for filename in get_ras_files:
             f_name = os.path.basename(filename)
             if re.match(r'S1[AB]_OPER_SAR_RAS____ETT_VC[1-9]_', f_name) and filename.endswith('.xemt'):
                 lista_vc_xemt.append(f_name)
         dir_to_templates = os.path.join(self.workspace_path, "templates","templates_l0")
-        #print("La direccion a los templates es", dir_to_templates)
-        #print("La direccion a los templates es", dir_to_templates)
         th = TemplateHandler(dir_to_templates)
-        th.render_ras_file(lista_vc_xemt,dtt_file, 'parameterFile.xml','parameterFile.xml')
+        th.render_ras_file(lista_vc_xemt,get_dttl_file[0], 'parameterFile.xml','parameterFile.xml')
 
         
 

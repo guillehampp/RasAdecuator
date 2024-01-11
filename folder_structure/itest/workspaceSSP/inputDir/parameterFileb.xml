@@ -9,23 +9,13 @@
     <parameter>
       <name>Data To Skip</name>
       <type>XPNetIntegerNotTimeTagged</type>
-      <value>0</value>
+      <value>55</value>
     </parameter>
     <parameter>
       <name>Data To Process</name>
       <type>XPNetIntegerNotTimeTagged</type>
-      <value>100</value>
+      <value>5</value>
     </parameter>
-    <!-- <parameter>
-        <name>Precision Attitude Product</name>
-        <type>XPNetStringNotTimeTagged</type>
-        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_QUATRN_CODS_20210610T132024_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt</value>
-    </parameter>
-    <parameter>
-        <name>Precision Orbit Product</name>
-        <type>XPNetStringNotTimeTagged</type>
-        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_EPHEMS_CODS_20210620T022318_DENSEORBEPHEM_MJ2K_XYZ_F_1.xemt</value>
-    </parameter> -->
   </inputs>
   <workDirectory>/opt/sao/appsharedfiles/SSP01/workspace</workDirectory>
   <outputs>
@@ -48,21 +38,21 @@
       <idProduct></idProduct>
     </output>
     <output>
-      <name>SAOCOM SAR L1D Product</name>
+      <name>SAOCOM SAR L1C Product</name>
       <type>XPNetStringNotTimeTagged</type>
-      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d.xemt</value>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c.xemt</value>
       <idProduct></idProduct>
     </output>
     <output>
-      <name>SAOCOM SAR L1D Product Annotated</name>
+      <name>SAOCOM SAR L1C Product Annotated</name>
       <type>XPNetStringNotTimeTagged</type>
-      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_an.xemt</value>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c_an.xemt</value>
       <idProduct></idProduct>
     </output>
     <output>
-      <name>SAOCOM SAR L1D Product QC</name>
+      <name>SAOCOM SAR L1C Product QC</name>
       <type>XPNetStringNotTimeTagged</type>
-      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_QC.xemt</value>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c_QC.xemt</value>
       <idProduct></idProduct>
     </output>
   </outputs>

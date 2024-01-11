@@ -1,0 +1,16 @@
+  </inputs>
+  <workDirectory>/opt/sao/appsharedfiles/L0F01/workspace</workDirectory>
+  <outputs>
+    <output>
+      <name>SAOCOM SAR L0A Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>outputDir/l0a.xemt</value>
+    </output>
+    <output>
+      <name>SAOCOM SAR L0A Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>outputDir/l0a_QC.xemt</value>
+    </output>
+  </outputs>
+</parameters>
+

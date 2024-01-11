@@ -42,9 +42,10 @@ def crea_estructura(config_params, path_to_adq):
 
 def process_adquisition(config_params, path_to_adq):
     #if not check_workdir_folders(path_to_adq):
+    
     if not check_tar_exists(path_to_adq):
-
         result = crea_estructura(config_params, path_to_adq)
+        print(result)
         if result:
             log_adec.info(f"Se ha creado la carpeta {path_to_adq}")
         else:
@@ -54,14 +55,15 @@ def process_adquisition(config_params, path_to_adq):
     # else:
     #     log_adec.error(f"La carpeta {path_to_adq} ya existe")
 
-def prepare_input(path_to_adq,input_tmd):
-    path_tmd = os.path.join(path_to_adq,input_tmd)
-    prepare_input = ProcessTMD(workspace_path=path_tmd,temporal_parameterFile="temporal_parameterFile",parameterFile="parameterFile")
-    prepare_input.create_input_temporal_params_file()
-    prepare_input.create_input_params_file()
+# def prepare_input(path_to_adq,input_tmd):
+#     path_tmd = os.path.join(path_to_adq,input_tmd)
+#     prepare_input = ProcessTMD(workspace_path=path_tmd,temporal_parameterFile="temporal_parameterFile",parameterFile="parameterFile")
+#     prepare_input.create_input_temporal_params_file()
+#     prepare_input.create_input_params_file()
 
-def adec_tmd(path_to_adq,input_tmd):
-    adec_tmd = ProcessTMD(workspace_path=path_to_adq,temporal_parameterFile="temporal_parameterFile",parameterFile="parameterFile")
+def input_files_tmd(path_to_adq,input_tmd,config_params,adquisition):
+    
+    adec_tmd = ProcessTMD(WORKDIR,config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition),)
     vc0_files = adec_tmd.find_files('VC0')
     destination_folder = os.path.join(path_to_adq,input_tmd)
     if not vc0_files:
@@ -77,16 +79,18 @@ def adec_l0f(path_to_adq,config_params,adquisition,input_l0f):
     adec_l0f = ProcessL0(WORKDIR,config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
     dttl_files = adec_l0f.find_files('_DTTL__')
     dttl_file = adec_l0f.get_recent_dttl(dttl_files)
-    ras_list = adec_l0f.ras_files()
-    adec_l0f.adec_xeml0f(ras_list,dttl_file)
-    #adec_l0f.move_files(ras_list,destination_folder)
+    ras_list = adec_l0f.ras_files(os.path.join(WORKDIR,adquisition))
+    adec_l0f.move_input_file(ras_list,dttl_file)
+    adec_l0f.adec_xeml0f()
+    
 def adec_ssp(platform,path_to_adq,config_params,adquisition,input_l0f):
     adec_ssp = ProcessSSP(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
+    ephems = adec_ssp.find_files(platform + '_*_*_EPHEMS' )
+    quatrn = adec_ssp.find_files(platform + '_*_*_QUATRN' )
+    tecigr = adec_ssp.find_files(platform + '_*_*_TECIGR' )
+    adec_ssp.move_files()
     adec_ssp.adec_ssp_parametter_file(platform)
-# def adec_l0f_xemt(path_to_adq,config_params,adquisition):
-#     adec_l0f = ProcessL0(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
-#     adec_l0f.adec_xeml0f()
-#     adec_l0f.process_files()
+
     
 def main():
     log_adec.info("Start Adecuator")
@@ -101,12 +105,12 @@ def main():
         file_handler.create_adq_folder(adquisition)
         path_to_adq = os.path.join(args.path, adquisition)
         platform = get_sat_platform(path_to_adq)
-        #process_adquisition(config_params, path_to_adq)
+        process_adquisition(config_params, path_to_adq)
         #prepare_input(path_to_adq,config_params.get('workspace_tmd_input'))
-        #adec_tmd(path_to_adq,config_params.get('workspace_tmd_input'))
-        #adec_xemtmd(path_to_adq,config_params,adquisition)
-        #adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
-        adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
+        input_files_tmd(path_to_adq,config_params.get('workspace_tmd_input'),config_params,adquisition)
+        adec_xemtmd(path_to_adq,config_params,adquisition)
+        adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
+        #adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
         #adec_l0f_xemt(path_to_adq,config_params,adquisition)
 if __name__ == '__main__':
     main()

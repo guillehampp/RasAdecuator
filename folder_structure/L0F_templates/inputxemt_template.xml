@@ -1,0 +1,5 @@
+    <parameter>
+      <name>RAS Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/L0F01/workspace/inputDir/INPUTXEMTNAME</value>
+    </parameter>

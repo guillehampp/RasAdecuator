@@ -16,7 +16,14 @@
       <type>XPNetIntegerNotTimeTagged</type>
       <value>100</value>
     </parameter>
-  <parameter>
+    {% for param in parameters %}
+    <parameter>
+      <name>{{ param.name }}</name>
+      <type>{{ param.type }}</type>
+      <value>{{ param.value }}</value>
+    </parameter>
+    {% endfor %}
+<!--  <parameter>
         <name>Precision Attitude Product</name>
         <type>XPNetStringNotTimeTagged</type>
         <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_QUATRN_CODS_20210610T132024_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt</value>
@@ -30,7 +37,7 @@
         <name>Total Electron Content CUSS Product</name>
         <type>XPNetStringNotTimeTagged</type>
         <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_TECIGR_CORE_20210608T120000.xemt</value>
-    </parameter>
+    </parameter>  -->
     <parameter>
         <name>Processor Configuration File</name>
         <type>XPNetStringNotTimeTagged</type>

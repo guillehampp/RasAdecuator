@@ -37,7 +37,22 @@ class ProcessSSP(ProcessBase):
         dir_to_templates = os.path.join(self.workspace_path, "templates","templates_ssp")
         th = TemplateHandler(dir_to_templates)
 
-        matching_files = glob.glob(f"{self.path_to_adq}/{platform}_OPER_ODF_QUATRN_CODS_*_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt")
+        matching_files_o = glob.glob(f"{self.path_to_adq}/{platform}_OPER_ODF_QUATRN_CODS_*_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt")
+        matching_files_r = glob.glob(f"{self.path_to_adq}/{platform}_OPER_ODF_EPHEMS_CODS_*_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt")
+        matching_files_f = glob.glob(f"{self.path_to_adq}/{platform}_OPER_ODF_EPHEMS_CODS_*_DENSEORBEPHEM_MJ2K_XYZ_F_1.xemt")
+        matching_teigr = glob.glob(f"{self.path_to_adq}/{platform}_OPER_ODF_TECIGR_CORE_*.xemt") #S1A_OPER_ODF_TECIGR_CORE_20210608T120000.xemt                                               
         # TODO buscar entre los archivos el mas actual y solamente retornar ese
-        print(self._get_most_recent_file(matching_files))
-        
+        th.render_ssp_input('parameterFile.xml','parameterFile.xml',matching_files_o[0],matching_files_r[0])
+        th.render_ssp_offline('parameterFile_OFFLINE.xml','parameterFile_OFFLINE.xml',matching_files_o[0],matching_files_f[0])
+        th.render_ssp_offline_fast('parameterFile_OFFLINEFAST.xml','parameterFile_OFFLINEFAST.xml',matching_files_o[0],matching_files_r[0])
+        th.render_offline_fast_final('parameterFile_OFFLINEFASTFINAL.xml','parameterFile_OFFLINEFASTFINAL.xml',matching_files_o[0],matching_files_f[0])
+        th.render_offline_very_fast('parameterFile_OFFLINEFASTFINAL.xml','parameterFile_OFFLINEFASTFINAL.xml')
+        th.render_online_very_fast('parameterFile_ONLINEVERYFAST.xml','parameterFile_ONLINEVERYFAST.xml')#parameterFile_ARG1.xml
+        th.render_arg1('parameterFile_ARG1.xml','parameterFile_ARG1.xml')
+        th.render_arg2('parameterFile_ARG2.xml','parameterFile_ARG2.xml',matching_files_o[0],matching_files_r[0])
+        th.render_arg3('parameterFile_ARG3.xml','parameterFile_ARG3.xml',matching_files_o[0],matching_files_f[0],matching_teigr[0])
+        print(self._get_most_recent_file(matching_files_o))
+        print(self._get_most_recent_file(matching_files_r))
+        print(self._get_most_recent_file(matching_files_f))
+    
+    

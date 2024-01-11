@@ -1,0 +1,4 @@
+# Verificacion de  DTTLS duplicados o triplicados
+# Este reporte muestra todas las lineas en input de los paramterFile de L0F, en donde se encuentran los paths a los archivos DDTL de entrada.
+# VERIFICAR DTTLS duplicados o triplicados en los paramterFile y eliminar, dejando siempre el DTTL con date_time mas reciente:
+
