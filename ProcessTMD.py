@@ -5,24 +5,8 @@ import shutil
 class ProcessTMD(ProcessBase):
     def __init__(self, workspace_path, temporal_parameterFile=None, parameterFile=None, config_params = None,adq_id = None, path_to_adq = None):
         super().__init__(workspace_path, temporal_parameterFile, parameterFile, config_params,adq_id, path_to_adq)
-        # self.workspace_path = workspace_path
-        # self.temporal_parameterFile = temporal_parameterFile if temporal_parameterFile else "default_temporal_parameterFile"
-        # self.parameterFile = parameterFile if parameterFile else "default_parameterFile"
-        # self.config_params = config_params
-        # self.adq_id = adq_id
-        # self.path_to_adq = path_to_adq
-        
-    # def create_input_temporal_params_file(self):
-    #     with open(self.workspace_path + '/'+ self.parameterFile + ".xml", 'w') as f:
-    #         f.write(self.parameterFile)
-    # def create_input_params_file(self):
-    #     with open(self.workspace_path +'/'+ self.temporal_parameterFile + ".xml", 'w') as f:
-    #         f.write(self.temporal_parameterFile)
-    # def find_vc0(self):
-    #     return sorted(glob.glob(os.path.join(self.workspace_path + '/*.vc0')))
-    # def move_vc0(self, vc0_files, destination_folder):
-    #     for vc0_file in vc0_files:
-    #         shutil.move(vc0_file, destination_folder)
+
+
     
     def adec_xemtmd(self):
  

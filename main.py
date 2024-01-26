@@ -52,14 +52,8 @@ def process_adquisition(config_params, path_to_adq):
             log_adec.error(f"Error al crear la carpeta {path_to_adq}")
     else:
         log_adec.error(f"Contiene archivos .tar")
-    # else:
-    #     log_adec.error(f"La carpeta {path_to_adq} ya existe")
 
-# def prepare_input(path_to_adq,input_tmd):
-#     path_tmd = os.path.join(path_to_adq,input_tmd)
-#     prepare_input = ProcessTMD(workspace_path=path_tmd,temporal_parameterFile="temporal_parameterFile",parameterFile="parameterFile")
-#     prepare_input.create_input_temporal_params_file()
-#     prepare_input.create_input_params_file()
+
 
 def input_files_tmd(path_to_adq,input_tmd,config_params,adquisition):
     
@@ -110,7 +104,7 @@ def main():
         input_files_tmd(path_to_adq,config_params.get('workspace_tmd_input'),config_params,adquisition)
         adec_xemtmd(path_to_adq,config_params,adquisition)
         adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
-        #adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
+        adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
         #adec_l0f_xemt(path_to_adq,config_params,adquisition)
 if __name__ == '__main__':
     main()
