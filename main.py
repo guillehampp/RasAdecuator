@@ -32,6 +32,7 @@ def check_tar_exists(workdir):
 def crea_estructura(config_params, path_to_adq):
     template_dir = config_params.get('workspace_template_dir')
     full_template_path = os.path.join(WORKDIR, template_dir)
+    print(f"Fulle template path {full_template_path}")
     file_handler = FileHandler(full_template_path)
     try:
         file_handler.copy_folder_content(path_to_adq)
@@ -42,7 +43,7 @@ def crea_estructura(config_params, path_to_adq):
 
 def process_adquisition(config_params, path_to_adq):
     #if not check_workdir_folders(path_to_adq):
-    
+
     if not check_tar_exists(path_to_adq):
         result = crea_estructura(config_params, path_to_adq)
         print(result)
@@ -82,7 +83,10 @@ def adec_ssp(platform,path_to_adq,config_params,adquisition,input_l0f):
     ephems = adec_ssp.find_files(platform + '_*_*_EPHEMS' )
     quatrn = adec_ssp.find_files(platform + '_*_*_QUATRN' )
     tecigr = adec_ssp.find_files(platform + '_*_*_TECIGR' )
-    adec_ssp.move_files()
+    all_files = ephems + quatrn + tecigr
+    dest_input_file_ssp =  os.path.join(path_to_adq,input_l0f)
+    print(all_files)
+    adec_ssp.move_files(all_files,dest_input_file_ssp)
     adec_ssp.adec_ssp_parametter_file(platform)
 
     
@@ -95,16 +99,18 @@ def main():
     
     #template_dir = os.path.join(WORKDIR, config_params.get('TMD_template_dir'))
     acquisition_folder = file_handler.open_txt_(args.lista_adquisiciones)
+    print(acquisition_folder)
     for adquisition in acquisition_folder:
-        file_handler.create_adq_folder(adquisition)
-        path_to_adq = os.path.join(args.path, adquisition)
+        print(adquisition)
+        #file_handler.create_adq_folder(adquisition)
+        path_to_adq = os.path.abspath(os.path.join(args.path, adquisition))
         platform = get_sat_platform(path_to_adq)
         process_adquisition(config_params, path_to_adq)
-        #prepare_input(path_to_adq,config_params.get('workspace_tmd_input'))
+
         input_files_tmd(path_to_adq,config_params.get('workspace_tmd_input'),config_params,adquisition)
         adec_xemtmd(path_to_adq,config_params,adquisition)
         adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
         adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
-        #adec_l0f_xemt(path_to_adq,config_params,adquisition)
+
 if __name__ == '__main__':
     main()

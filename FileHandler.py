@@ -19,13 +19,15 @@ class FileHandler:
             return False
         with open(file_path + '/' + file_name,  'r') as file:
             log_adec.info(f"File opened: {file_path}")
-            data = file.readlines()
+            data = [line.strip() for line in file.readlines()]
         return data
     def copy_folder_content(self, destination_folder):
+        print(f"destination folder is {destination_folder}")
         if not os.path.exists(self.file_path):
             log_adec.error(f"Source folder not found: {self.file_path}")
             return
         if not os.path.exists(destination_folder):
+            print("Existe???")
             os.makedirs(destination_folder)
         for subdir, dirs, files in os.walk(self.file_path):
             for dir in dirs:
