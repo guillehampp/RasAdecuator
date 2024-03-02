@@ -26,7 +26,6 @@
         <type>XPNetStringNotTimeTagged</type>
         <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_EPHEMS_CODS_20210609T221549_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt</value>
     </parameter>-->
-
     {% for param in parameters %}
     <parameter>
       <name>{{ param.name }}</name>

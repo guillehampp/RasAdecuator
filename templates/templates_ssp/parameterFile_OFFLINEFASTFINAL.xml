@@ -16,16 +16,6 @@
       <type>XPNetIntegerNotTimeTagged</type>
       <value>100</value>
     </parameter>
-    <!-- <parameter>
-        <name>Precision Attitude Product</name>
-        <type>XPNetStringNotTimeTagged</type>
-        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_QUATRN_CODS_20210610T132024_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt</value>
-    </parameter>
-    <parameter>
-        <name>Precision Orbit Product</name>
-        <type>XPNetStringNotTimeTagged</type>
-        <value>/opt/sao/appsharedfiles/SSP01/workspace/inputDir/S1A_OPER_ODF_EPHEMS_CODS_20210620T022318_DENSEORBEPHEM_MJ2K_XYZ_F_1.xemt</value>
-    </parameter> -->
   </inputs>
   <workDirectory>/opt/sao/appsharedfiles/SSP01/workspace</workDirectory>
   <outputs>
