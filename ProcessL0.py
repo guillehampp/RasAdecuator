@@ -53,19 +53,24 @@ class ProcessL0(ProcessBase):
         destination_folder = os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input') )
         self.move_files(ras_files,destination_folder)
         self.move_files(dtt_file,destination_folder )
-        
+    def get_real_dttl_path(self,dttls):
+        nueva_ruta = '/opt/sao/appsharedfiles/L0F01/workspace/inputDir/'
+        lista = [os.path.join(nueva_ruta, os.path.basename(x)) for x in dttls]
+        return lista
     def adec_xeml0f(self):
         dest_parametters_files = os.path.join(self.path_to_adq, self.config_params.get('workspace_l0f_input'))
         lista_vc_xemt = []
         get_ras_files = self.ras_files(os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input')))
         get_dttl_file = self.find_files('_DTTL__',os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input')) )
+        real_dtt_path = self.get_real_dttl_path(get_dttl_file)
+
         for filename in get_ras_files:
             f_name = os.path.basename(filename)
             if re.match(r'S1[AB]_OPER_SAR_RAS____IMT_VC[1-9]_', f_name) and filename.endswith('.xemt'):
-                lista_vc_xemt.append(f_name)
+                lista_vc_xemt.append(os.path.join('/opt/sao/appsharedfiles/L0F01/workspace/inputDir/',f_name))
         dir_to_templates = os.path.join(self.workspace_path, "templates","templates_l0")
         th = TemplateHandler(dir_to_templates)
-        th.render_ras_file(lista_vc_xemt,get_dttl_file[0], 'parameterFile.xml',os.path.join(dest_parametters_files, 'parameterFile.xml'))
+        th.render_ras_file(lista_vc_xemt,real_dtt_path[0], 'parameterFile.xml',os.path.join(dest_parametters_files, 'parameterFile.xml'))
 
         
 
