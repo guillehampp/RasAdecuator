@@ -5,8 +5,12 @@ log_adec = Log(__name__)
 
 
 class FileHandler:
-    def __init__(self, file_path):
+    def __init__(self, file_path,config_params = None,adq_id = None, path_to_adq = None):
         self.file_path = file_path
+        self.config_params = config_params
+        self.adq_id = adq_id
+        self.path_to_adq = path_to_adq
+        
     def create_adq_folder(self,adquisition_id):
         adq_id_fodler = os.path.join(self.file_path,adquisition_id)
         if not os.path.exists(adq_id_fodler):
@@ -21,8 +25,8 @@ class FileHandler:
             log_adec.info(f"File opened: {file_path}")
             data = [line.strip() for line in file.readlines()]
         return data
+    
     def copy_folder_content(self, destination_folder):
-        print(f"destination folder is {destination_folder}")
         if not os.path.exists(self.file_path):
             log_adec.error(f"Source folder not found: {self.file_path}")
             return
@@ -37,4 +41,15 @@ class FileHandler:
                 src_file = os.path.join(subdir, file)
                 dst_file = os.path.join(destination_folder, subdir.replace(self.file_path, '').lstrip(os.sep), file)
                 shutil.copy2(src_file, dst_file)
-        log_adec.info(f"Content copied from {self.file_path} to {destination_folder}")
+                log_adec.info(f"Content copied from {src_file} to {dst_file}")
+        
+    def create_folder_structure(self):
+        template_dir = self.config_params.get('workspace_template_dir')
+        full_template_path = os.path.join(self.file_path, template_dir)
+        file_handler = FileHandler(full_template_path)
+        try:
+            file_handler.copy_folder_content(self.path_to_adq)
+            return True
+        except Exception as e:
+            log_adec.error(f"Error al crear la estructura: {e}")
+            return False

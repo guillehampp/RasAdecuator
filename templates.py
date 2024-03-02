@@ -1,5 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
-import os
+from Log import Log
+
+log_adec = Log(__name__)
 
 class TemplateHandler:
     def __init__(self, templates_dir):
@@ -24,13 +26,12 @@ class TemplateHandler:
             
 
     def render_ras_file(self, ras_files, dttl_file, template_name, output_name):
-        outputs = []
 
         # Renderiza la parte de la plantilla para dttl_file
         parameters = [{'name': 'Acquisition Timeline Product', 'type': 'XPNetStringNotTimeTagged', 'value': dttl_file}]
         for file in ras_files:
             parameters.append({'name': 'RAS Product', 'type': 'XPNetStringNotTimeTagged', 'value': file})
-        print(parameters)
+
         # Renderiza la plantilla con los parámetros
         output = self.render_template(template_name, parameters)
 
@@ -38,17 +39,14 @@ class TemplateHandler:
         with open(output_name, 'w') as f:
             f.write(output)
             
-    def render_ssp_input(self,template_name,output_name,att_product,precision_product):
+    def render_ssp_input(self, template_name, output_name, att_product, precision_product):
         parameters = []
-        outputs = []
         parameters.append({'name': 'Precision Attitude Product', 'type': 'XPNetStringNotTimeTagged', 'value': att_product})
-        output = self.render_template(template_name,  parameters)
-        
         parameters.append({'name': 'Precision Orbit Product', 'type': 'XPNetStringNotTimeTagged', 'value': precision_product})
-        output = self.render_template(template_name,  parameters)
-        outputs.append(output)
-        with open(output_name, 'a') as f:  # Deja 'a' para agregar al final del archivo
+        output = self.render_template(template_name, parameters)
+        with open(output_name, 'w') as f:  # Cambia 'a' por 'w' para sobrescribir el archivo
             f.write(output)
+            
     def render_ssp_offline(self,template_name,output_name,att_product,precision_product):
         parameters = []
         outputs = []
@@ -60,6 +58,7 @@ class TemplateHandler:
         outputs.append(output)
         with open(output_name, 'a') as f:  # Deja 'a' para agregar al final del archivo
             f.write(output)
+            
     def render_ssp_offline_fast(self,template_name,output_name,att_product,precision_product):
         parameters = []
         outputs = []

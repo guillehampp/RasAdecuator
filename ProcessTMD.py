@@ -1,7 +1,10 @@
 import os
 from ProcessBase import ProcessBase
 from templates import TemplateHandler
-import shutil
+from Log import Log
+
+log_adec = Log(__name__)
+
 class ProcessTMD(ProcessBase):
     def __init__(self, workspace_path, temporal_parameterFile=None, parameterFile=None, config_params = None,adq_id = None, path_to_adq = None):
         super().__init__(workspace_path, temporal_parameterFile, parameterFile, config_params,adq_id, path_to_adq)

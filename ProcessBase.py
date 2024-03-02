@@ -1,7 +1,9 @@
 import os
 import glob
 import shutil
+from Log import Log
 
+log_adec = Log(__name__)
 class ProcessBase:
     def __init__(self, workspace_path, temporal_parameterFile=None, parameterFile=None, config_params = None,adq_id = None, path_to_adq = None):
         self.workspace_path = workspace_path
@@ -36,4 +38,4 @@ class ProcessBase:
             if os.path.isfile(v_file):
                 shutil.move(v_file, destination_folder)
             else:
-                print(f"'{v_file}' no existe y no se moverá.")
+                log_adec.error(f"'{v_file}' no existe y no se moverá.")

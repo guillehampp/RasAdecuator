@@ -1,12 +1,12 @@
 import glob
 import os
+import shutil
 from YamlLoader import YamlLoader
 from Log import Log
 from FileHandler import FileHandler
 from ArgumentHandler import ArgumentHandler
-from ProcessTMD import ProcessTMD
-from ProcessL0 import ProcessL0
-from ProcessSSP import ProcessSSP
+from adec_processor import AdecProcessor
+
 
 log_adec = Log(__name__)
 WORKDIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +18,7 @@ def load_config():
         raise
     loader = YamlLoader(pat_yaml)
     return loader.load()
+
 def get_sat_platform(path_to_adq):
     get_dtt_file = glob.glob(os.path.join(path_to_adq, '*DTTL*'))
     for dtt_file in get_dtt_file:
@@ -29,22 +30,12 @@ def check_tar_exists(workdir):
     tar_files = glob.glob(os.path.join(workspaces, "*.tar"))
     return tar_files
 
-def crea_estructura(config_params, path_to_adq):
-    template_dir = config_params.get('workspace_template_dir')
-    full_template_path = os.path.join(WORKDIR, template_dir)
-    file_handler = FileHandler(full_template_path)
-    try:
-        file_handler.copy_folder_content(path_to_adq)
-        return True
-    except Exception as e:
-        log_adec.error(f"Error al crear la estructura: {e}")
-        return False
 
-def process_adquisition(config_params, path_to_adq):
-    #if not check_workdir_folders(path_to_adq):
+def prepare_folder(config_params, path_to_adq):
 
     if not check_tar_exists(path_to_adq):
-        result = crea_estructura(config_params, path_to_adq)
+        file_handler = FileHandler(WORKDIR,config_params=config_params,adq_id=None,path_to_adq=path_to_adq)
+        result = file_handler.create_folder_structure()
         if result:
             log_adec.info(f"Se ha creado la carpeta {path_to_adq}")
         else:
@@ -53,42 +44,23 @@ def process_adquisition(config_params, path_to_adq):
         log_adec.error(f"Contiene archivos .tar")
 
 
-
-def input_files_tmd(path_to_adq,input_tmd,config_params,adquisition):
-    
-    adec_tmd = ProcessTMD(WORKDIR,config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition),)
-    vc0_files = adec_tmd.find_files('VC0')
-    destination_folder = os.path.join(path_to_adq,input_tmd)
-    if not vc0_files:
-        log_adec.error("No se encontraron archivos .vc0")
-    else:
-        adec_tmd.move_files(vc0_files, destination_folder)
-
-def adec_xemtmd(path_to_adq,config_params,adquisition):
-    adec_tmd = ProcessTMD(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=path_to_adq)
-    adec_tmd.adec_xemtmd()
-    
-def adec_l0f(path_to_adq,config_params,adquisition,input_l0f):
-    adec_l0f = ProcessL0(WORKDIR,config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
-    dttl_files = adec_l0f.find_files('_DTTL__')
-    recent_dttl_files = adec_l0f.get_recent_files(dttl_files)
-    ras_list = adec_l0f.ras_files(os.path.join(WORKDIR,adquisition))
-    adec_l0f.move_input_file(ras_list,recent_dttl_files)
-    adec_l0f.adec_xeml0f()
-    
-def adec_ssp(platform,path_to_adq,config_params,adquisition,input_l0f):
-    adec_ssp = ProcessSSP(WORKDIR, config_params=config_params,adq_id=adquisition, path_to_adq=os.path.join(WORKDIR,adquisition))
-    ephems = adec_ssp.find_files(platform + '_*_*_EPHEMS' )
-    quatrn = adec_ssp.find_files(platform + '_*_*_QUATRN' )
-    tecigr = adec_ssp.find_files(platform + '_*_*_TECIGR' )
-    all_files = ephems + quatrn + tecigr
-    dest_input_file_ssp =  os.path.join(path_to_adq,input_l0f)
-    adec_ssp.move_files(all_files,dest_input_file_ssp)
-    adec_ssp.adec_ssp_parametter_file(platform)
-
-    
+def delete_folders(path):
+    for folder_name in os.listdir(path):
+        if folder_name.startswith('get_arch26_12'):
+            folder_path = os.path.join(path, folder_name)
+            if os.path.isdir(folder_path):
+                shutil.rmtree(folder_path)
+def copy_folder_for_test(path):
+    for folder_name in os.listdir(path):
+        if folder_name.startswith('get_arch26_12'):
+            folder_path = os.path.join(path, folder_name)
+            if os.path.isdir(folder_path):
+                dest_path = os.path.join(WORKDIR, folder_name)
+                shutil.copytree(folder_path, dest_path)
 def main():
     log_adec.info("Start Adecuator")
+    delete_folders(WORKDIR)
+    copy_folder_for_test("adquisiciones")
     config_params = load_config()
     handler = ArgumentHandler()
     args = handler.get_arguments()
@@ -101,12 +73,13 @@ def main():
         #file_handler.create_adq_folder(adquisition)
         path_to_adq = os.path.abspath(os.path.join(args.path, adquisition))
         platform = get_sat_platform(path_to_adq)
-        process_adquisition(config_params, path_to_adq)
+        prepare_folder(config_params, path_to_adq)
+        adec_processor = AdecProcessor(WORKDIR,config_params,adquisition,path_to_adq,platform)
+        adec_processor.input_files_tmd()
+        adec_processor.adec_xemtmd()
+        adec_processor.adec_l0f()
+        adec_processor.adec_ssp()
 
-        input_files_tmd(path_to_adq,config_params.get('workspace_tmd_input'),config_params,adquisition)
-        adec_xemtmd(path_to_adq,config_params,adquisition)
-        adec_l0f(path_to_adq,config_params,adquisition,config_params.get('workspace_l0f_input'))
-        adec_ssp(platform,path_to_adq,config_params,adquisition,config_params.get('workspace_ssp_input'))
 
 if __name__ == '__main__':
     main()

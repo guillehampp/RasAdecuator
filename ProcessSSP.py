@@ -4,6 +4,9 @@ from xml.etree import ElementTree as ET
 import datetime
 import glob
 import os
+from Log import Log
+
+log_adec = Log(__name__)
 
 class ProcessSSP(ProcessBase):
 
@@ -67,4 +70,4 @@ class ProcessSSP(ProcessBase):
         th.render_arg1('parameterFile_ARG1.xml', os.path.join(dest_parametters_files, 'parameterFile_ARG1.xml'))
 
         for key, file in matching_files.items():
-            print(f"El archivo mas reciente es {file}")
+            log_adec.info(f"El archivo mas reciente es {file}")
