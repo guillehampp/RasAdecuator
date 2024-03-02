@@ -27,7 +27,6 @@ class FileHandler:
             log_adec.error(f"Source folder not found: {self.file_path}")
             return
         if not os.path.exists(destination_folder):
-            print("Existe???")
             os.makedirs(destination_folder)
         for subdir, dirs, files in os.walk(self.file_path):
             for dir in dirs:

@@ -26,14 +26,25 @@ class ProcessL0(ProcessBase):
         files.sort()
         
         return files
-    def get_recent_dttl(self, dttl_files):
+    def get_recent_files(self, dttl_files):
         # Filtrar la lista de archivos para incluir solo los que terminan en 'xemt'
         xemt_files = [f for f in dttl_files if f.endswith('xemt')]
-        
-        # Encuentra el archivo con el valor máximo en la posición 11 después de dividir el nombre del archivo
-        dttl_file = max(xemt_files, key=lambda filename: re.split("_", filename)[10])
+        # Filtrar la lista de archivos para incluir solo los que terminan en 'xml'
+        xml_files = [f for f in dttl_files if f.endswith('xml')]
 
-        return dttl_file
+        recent_files = []
+
+        # Encuentra el archivo xemt con el valor máximo en la posición 11 después de dividir el nombre del archivo
+        if xemt_files:
+            recent_xemt_file = max(xemt_files, key=lambda filename: re.split("_", filename)[10])
+            recent_files.append(recent_xemt_file)
+
+        # Encuentra el archivo xml con el valor máximo en la posición 11 después de dividir el nombre del archivo
+        if xml_files:
+            recent_xml_file = max(xml_files, key=lambda filename: re.split("_", filename)[10])
+            recent_files.append(recent_xml_file)
+
+        return recent_files
 
     def move_input_file(self,ras_files, dtt_file):
         destination_folder = os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input') )
@@ -41,17 +52,17 @@ class ProcessL0(ProcessBase):
         self.move_files(dtt_file,destination_folder )
         
     def adec_xeml0f(self):
-
+        dest_parametters_files = os.path.join(self.path_to_adq, self.config_params.get('workspace_l0f_input'))
         lista_vc_xemt = []
         get_ras_files = self.ras_files(os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input')))
         get_dttl_file = self.find_files('_DTTL__',os.path.join(self.path_to_adq,self.config_params.get('workspace_l0f_input')) )
         for filename in get_ras_files:
             f_name = os.path.basename(filename)
-            if re.match(r'S1[AB]_OPER_SAR_RAS____ETT_VC[1-9]_', f_name) and filename.endswith('.xemt'):
+            if re.match(r'S1[AB]_OPER_SAR_RAS____IMT_VC[1-9]_', f_name) and filename.endswith('.xemt'):
                 lista_vc_xemt.append(f_name)
         dir_to_templates = os.path.join(self.workspace_path, "templates","templates_l0")
         th = TemplateHandler(dir_to_templates)
-        th.render_ras_file(lista_vc_xemt,get_dttl_file[0], 'parameterFile.xml','parameterFile.xml')
+        th.render_ras_file(lista_vc_xemt,get_dttl_file[0], 'parameterFile.xml',os.path.join(dest_parametters_files, 'parameterFile.xml'))
 
         
 
@@ -81,7 +92,6 @@ class ProcessL0(ProcessBase):
             
             # Eliminar el "./" del nombre del archivo
             dttl_name = dttl_name.replace("./", "")
-            print("El nombre de dttl es:, ",dttl_name)
             # Reemplazar el string "INPUTDTTLNAME" en el archivo template
             template_file = os.path.join(workspace_input_dir,"inputdttl_template.xml")
             with open(template_file, "r") as file:

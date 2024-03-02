@@ -30,7 +30,7 @@ class TemplateHandler:
         parameters = [{'name': 'Acquisition Timeline Product', 'type': 'XPNetStringNotTimeTagged', 'value': dttl_file}]
         for file in ras_files:
             parameters.append({'name': 'RAS Product', 'type': 'XPNetStringNotTimeTagged', 'value': file})
-
+        print(parameters)
         # Renderiza la plantilla con los parámetros
         output = self.render_template(template_name, parameters)
 

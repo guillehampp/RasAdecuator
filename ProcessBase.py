@@ -31,7 +31,7 @@ class ProcessBase:
             files = [files]
 
         for v_file in files:
-            print(f"Moviendo '{v_file}' a '{destination_folder}'")
+
             # Verifica si el archivo existe antes de intentar moverlo
             if os.path.isfile(v_file):
                 shutil.move(v_file, destination_folder)
