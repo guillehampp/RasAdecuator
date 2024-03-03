@@ -33,9 +33,9 @@ class ProcessBase:
             files = [files]
 
         for v_file in files:
-
             # Verifica si el archivo existe antes de intentar moverlo
             if os.path.isfile(v_file):
+                log_adec.info(f"Moving {v_file} to {destination_folder}")
                 shutil.move(v_file, destination_folder)
             else:
                 log_adec.error(f"'{v_file}' no existe y no se moverá.")

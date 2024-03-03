@@ -44,6 +44,7 @@ class FileHandler:
                 log_adec.info(f"Content copied from {src_file} to {dst_file}")
         
     def create_folder_structure(self):
+        log_adec.info(f"Creating folder structure for {self.path_to_adq}")
         template_dir = self.config_params.get('workspace_template_dir')
         full_template_path = os.path.join(self.file_path, template_dir)
         file_handler = FileHandler(full_template_path)

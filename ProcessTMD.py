@@ -19,5 +19,7 @@ class ProcessTMD(ProcessBase):
         for filename in os.listdir(workdir_tmd):
             if re.match(f'{self.platform}_OPER_SAR_RAS__.*_VC0_.*\.xemt$', filename):
                 lista_vc0_xemt.append(os.path.join('opt/sao/appsharedfiles/TMD01/workspace/inputDir/',filename))
+                log_adec.info(f"Se encontro el archivo {filename}")
         dest_parametters_files = os.path.join(self.path_to_adq, self.config_params.get('workspace_tmd_input'))
+        log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
         th.render_tmd_files(lista_vc0_xemt, 'parameterFile.xml',os.path.join(dest_parametters_files, 'parameterFile.xml'))

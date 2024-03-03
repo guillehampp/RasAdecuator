@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 class Log:
     def __init__(self, name):
@@ -11,7 +12,8 @@ class Log:
         #ch.setLevel(logging.DEBUG)
         
         # create file handler and set level to debug
-        fh = logging.FileHandler('arch_logfile.log')
+        current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        fh = logging.FileHandler(f'adecuator_log_{current_time}.log')
         fh.setLevel(logging.DEBUG)
         
         # create formatter

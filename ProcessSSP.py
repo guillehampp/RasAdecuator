@@ -55,18 +55,25 @@ class ProcessSSP(ProcessBase):
                 matching_files[key] = self._get_most_recent_file(files)
 
         if "o" in matching_files and "r" in matching_files:
+            log_adec.info("Creando archivo parameterFile.xml")
             th.render_ssp_input('parameterFile.xml', os.path.join(dest_parametters_files, 'parameterFile.xml'), matching_files["o"], matching_files["r"])
+            log_adec.info("Creando archivo parameterFile_OFFLINEFAST.xml")
             th.render_ssp_offline_fast('parameterFile_OFFLINEFAST.xml', os.path.join(dest_parametters_files, 'parameterFile_OFFLINEFAST.xml'), matching_files["o"], matching_files["r"])
+            log_adec.info("Creando archivo parameterFile_ARG2.xml")
             th.render_arg2('parameterFile_ARG2.xml', os.path.join(dest_parametters_files, 'parameterFile_ARG2.xml'), matching_files["o"], matching_files["r"])
 
         if "o" in matching_files and "f" in matching_files:
+            log_adec.info("Creando archivo parameterFile_OFFLINE.xml")
             th.render_ssp_offline('parameterFile_OFFLINE.xml', os.path.join(dest_parametters_files, 'parameterFile_OFFLINE.xml'), matching_files["o"], matching_files["f"])
+            log_adec.info("Creando archivo parameterFile_OFFLINEFASTFINAL.xml")
             th.render_offline_fast_final('parameterFile_OFFLINEFASTFINAL.xml', os.path.join(dest_parametters_files, 'parameterFile_OFFLINEFASTFINAL.xml'), matching_files["o"], matching_files["f"])
 
         if "o" in matching_files and "f" in matching_files and "teigr" in matching_files:
+            log_adec.info("Creando archivo parameterFile_ARG3.xml")
             th.render_arg3('parameterFile_ARG3.xml', os.path.join(dest_parametters_files, 'parameterFile_ARG3.xml'), matching_files["o"], matching_files["f"], matching_files["teigr"])
-
+        log_adec.info("Creando archivo parameterFile_ONLINEVERYFAST.xml")
         th.render_online_very_fast('parameterFile_ONLINEVERYFAST.xml', os.path.join(dest_parametters_files, 'parameterFile_ONLINEVERYFAST.xml'))
+        log_adec.info("Creando archivo parameterFile_ARG1.xml")
         th.render_arg1('parameterFile_ARG1.xml', os.path.join(dest_parametters_files, 'parameterFile_ARG1.xml'))
 
         for key, file in matching_files.items():
