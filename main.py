@@ -45,6 +45,20 @@ def prepare_folder(config_params, path_to_adq):
         log_adec.error(f"Contiene archivos .tar")
 
 
+def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
+    log_adec.info(f"movig folder {path_to_adq} to {output_folder}")
+    new_output_folder = os.path.join(output_folder, os.path.basename(path_to_adq))
+    os.makedirs(new_output_folder, exist_ok=True)
+    for file_name in os.listdir(path_to_adq):
+        src_file = os.path.join(path_to_adq, file_name)
+        dst_file = os.path.join(new_output_folder, file_name)
+        if os.path.exists(dst_file):
+            if os.path.isfile(dst_file):
+                os.remove(dst_file)
+            elif os.path.isdir(dst_file):
+                shutil.rmtree(dst_file)
+        shutil.move(src_file, dst_file)
+            
 def delete_folders(path):
     for folder_name in os.listdir(path):
         if folder_name.startswith('get_arch26_12'):
@@ -85,7 +99,7 @@ def main():
         adec_processor.adec_l0f()
         log_adec.info("Start adecuating SPP files")
         adec_processor.adec_ssp()
-
+        mover_adqusiciones_adecuadas(path_to_adq,os.path.join("/usr/src/app/",args.output_folder))
 
 if __name__ == '__main__':
     main()

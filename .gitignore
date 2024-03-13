@@ -1,6 +1,5 @@
 adecuator_venv
 123456
-adec_*
 arch_*
 __pycache__
 adq*
@@ -9,3 +8,4 @@ templates_backup
 tmp
 get_arch26*
 adecuator_log_*
+ras_adecuator.tar

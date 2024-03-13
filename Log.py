@@ -13,7 +13,7 @@ class Log:
         
         # create file handler and set level to debug
         current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        fh = logging.FileHandler(f'adecuator_log_{current_time}.log')
+        fh = logging.FileHandler(f'log/adecuator_log_{current_time}.log')
         fh.setLevel(logging.DEBUG)
         
         # create formatter
