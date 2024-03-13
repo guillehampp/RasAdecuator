@@ -1,30 +1,33 @@
 import logging
 from datetime import datetime
 
+
 class Log:
     def __init__(self, name):
         # create logger
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
-        
+
         # create console handler and set level to debug
-        #ch = logging.StreamHandler()
-        #ch.setLevel(logging.DEBUG)
-        
+        # ch = logging.StreamHandler()
+        # ch.setLevel(logging.DEBUG)
+
         # create file handler and set level to debug
-        current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        fh = logging.FileHandler(f'log/adecuator_log_{current_time}.log')
+        current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        fh = logging.FileHandler(f"log/adecuator_log_{current_time}.log")
         fh.setLevel(logging.DEBUG)
-        
+
         # create formatter
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+
         # add formatter to ch and fh
-        #ch.setFormatter(formatter)
+        # ch.setFormatter(formatter)
         fh.setFormatter(formatter)
-        
+
         # add ch and fh to logger
-        #self.logger.addHandler(ch)
+        # self.logger.addHandler(ch)
         self.logger.addHandler(fh)
 
     def debug(self, message):

@@ -6,6 +6,6 @@ class YamlLoader:
         self.file_path = file_path
 
     def load(self):
-        with open(self.file_path, 'r') as file:
+        with open(self.file_path, "r") as file:
             data = yaml.safe_load(file)
         return data
