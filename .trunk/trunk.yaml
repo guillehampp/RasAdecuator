@@ -18,9 +18,12 @@ runtimes:
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   disabled:
+    - autopep8
     - checkov
   enabled:
-    - autopep8@2.0.4
+    - semgrep@1.65.0
+    - pylint@3.1.0
+    - sourcery@1.15.0
     - taplo@0.8.1
     - actionlint@1.6.27
     - bandit@1.7.8
