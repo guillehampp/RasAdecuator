@@ -2,7 +2,7 @@
 # To learn more about the format of this file, see https://docs.trunk.io/reference/trunk-yaml
 version: 0.1
 cli:
-  version: 1.20.1
+  version: 1.21.0
 # Trunk provides extensibility via plugins. (https://docs.trunk.io/plugins)
 plugins:
   sources:
@@ -18,6 +18,7 @@ runtimes:
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   disabled:
+    - black
     - autopep8
     - checkov
   enabled:
@@ -27,7 +28,6 @@ lint:
     - taplo@0.8.1
     - actionlint@1.6.27
     - bandit@1.7.8
-    - black@24.2.0
     - git-diff-check
     - hadolint@2.12.0
     - isort@5.13.2

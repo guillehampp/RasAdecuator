@@ -1,9 +1,9 @@
 import os
 
 from Log import Log
-from ProcessL0 import ProcessL0
-from ProcessSSP import ProcessSSP
-from ProcessTMD import ProcessTMD
+from process_l0 import ProcessL0
+from process_ssp import ProcessSSP
+from process_tmd import ProcessTMD
 
 log_adec = Log(__name__)
 

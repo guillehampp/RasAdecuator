@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from ProcessBase import ProcessBase
+from process_base import ProcessBase
 
 
 class TestProcessBase(unittest.TestCase):

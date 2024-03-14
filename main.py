@@ -1,3 +1,8 @@
+"""
+Modulo main
+
+"""
+
 import glob
 import os
 import shutil
@@ -13,45 +18,75 @@ WORKDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_config():
+    """_summary_
+        carga elarchivo de configuracion
+    Returns:
+        _type_: object
+    """
     try:
         pat_yaml = os.path.join(WORKDIR, "config_adec.yaml")
         log_adec.info(f"Path to config file: {pat_yaml}")
     except Exception as e:
-        log_adec.error("Failed to load YAML file: {str(e)}")
+        log_adec.error(f"Failed to load YAML file: {str(e)}")
         raise
     loader = YamlLoader(pat_yaml)
     return loader.load()
 
 
 def get_sat_platform(path_to_adq):
+    """_summary_
+        Obtiene el nombre de la plataforma del archivo DTTL
+    Args:
+        path_to_adq (_type_): Ruta a la adquisicion
+
+    Returns:
+        _type_: retorna el nombre de la plataforma
+    """
     get_dtt_file = glob.glob(os.path.join(path_to_adq, "*DTTL*"))
     for dtt_file in get_dtt_file:
         platform = os.path.basename(dtt_file).split("_")[0]
-        return platform
+    return platform
 
 
 def check_tar_exists(workdir):
+    """_summary_
+        Checkea si existe algun archivo .tar dentro del directorio
+    Args:
+        workdir object path: recibe la ruta de la carpeta de trabajo
+
+    Returns:
+        _type_: lista de archivos .tar
+    """
     workspaces = os.path.join(workdir, "workspaceTMD", "inputDir")
-    tar_files = glob.glob(os.path.join(workspaces, "*.tar"))
-    return tar_files
+    return glob.glob(os.path.join(workspaces, "*.tar"))
 
 
 def prepare_folder(config_params, path_to_adq):
-
+    """_summary_
+    chequea si la carpeta esta vacia, si es asi intenta crear la estructura
+    Args:
+        config_params (_type_): parametros de la configuracion
+        path_to_adq (_type_): path a la adquisicion
+    """
     if not check_tar_exists(path_to_adq):
         file_handler = FileHandler(
             WORKDIR, config_params=config_params, adq_id=None, path_to_adq=path_to_adq
         )
-        result = file_handler.create_folder_structure()
-        if result:
+        if file_handler.create_folder_structure():
             log_adec.info(f"Se ha creado la carpeta {path_to_adq}")
         else:
             log_adec.error(f"Error al crear la carpeta {path_to_adq}")
     else:
-        log_adec.error(f"Contiene archivos .tar")
+        log_adec.error("Contiene archivos .tar")
 
 
 def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
+    """_summary_
+
+    Args:
+        path_to_adq (_type_): _description_
+        output_folder (_type_): _description_
+    """
     log_adec.info(f"movig folder {path_to_adq} to {output_folder}")
     new_output_folder = os.path.join(output_folder, os.path.basename(path_to_adq))
     os.makedirs(new_output_folder, exist_ok=True)
@@ -67,6 +102,11 @@ def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
 
 
 def delete_folders(path):
+    """_summary_
+
+    Args:
+        path (_type_): _description_
+    """
     for folder_name in os.listdir(path):
         if folder_name.startswith("get_arch26_12"):
             folder_path = os.path.join(path, folder_name)
@@ -75,6 +115,11 @@ def delete_folders(path):
 
 
 def copy_folder_for_test(path):
+    """_summary_
+
+    Args:
+        path (_type_): _description_
+    """
     for folder_name in os.listdir(path):
         if folder_name.startswith("get_arch26_12"):
             folder_path = os.path.join(path, folder_name)
@@ -84,6 +129,9 @@ def copy_folder_for_test(path):
 
 
 def main():
+    """
+        Arranca la tool
+    """
     log_adec.info("Start Adecuator")
     delete_folders(WORKDIR)
     copy_folder_for_test("adquisiciones")

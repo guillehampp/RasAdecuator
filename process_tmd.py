@@ -2,7 +2,7 @@ import os
 import re
 
 from Log import Log
-from ProcessBase import ProcessBase
+from process_base import ProcessBase
 from templates import TemplateHandler
 
 log_adec = Log(__name__)

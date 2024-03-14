@@ -4,7 +4,7 @@ import os
 from xml.etree import ElementTree as ET
 
 from Log import Log
-from ProcessBase import ProcessBase
+from process_base import ProcessBase
 from templates import TemplateHandler
 
 log_adec = Log(__name__)
@@ -77,8 +77,7 @@ class ProcessSSP(ProcessBase):
 
         matching_files = {}
         for key, pattern in file_patterns:
-            files = glob.glob(os.path.join(dest_parametters_files, pattern))
-            if files:
+            if files := glob.glob(os.path.join(dest_parametters_files, pattern)):
                 matching_files[key] = self._get_most_recent_file(files)
 
         if "o" in matching_files and "r" in matching_files:
@@ -146,5 +145,5 @@ class ProcessSSP(ProcessBase):
             os.path.join(dest_parametters_files, "parameterFile_ARG1.xml"),
         )
 
-        for key, file in matching_files.items():
+        for file in matching_files.values():
             log_adec.info(f"El archivo mas reciente es {file}")
