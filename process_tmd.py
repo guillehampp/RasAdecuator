@@ -9,6 +9,19 @@ log_adec = Log(__name__)
 
 
 class ProcessTMD(ProcessBase):
+    """
+    Class for processing TMD files.
+
+    Args:
+        workspace_path (str): The path to the workspace.
+        temporal_parameterFile (str, optional): The path to the temporal parameter file. Defaults to None.
+        parameterFile (str, optional): The path to the parameter file. Defaults to None.
+        config_params (dict, optional): Configuration parameters. Defaults to None.
+        adq_id (str, optional): The ADQ ID. Defaults to None.
+        path_to_adq (str, optional): The path to the ADQ. Defaults to None.
+        platform (str, optional): The platform. Defaults to None.
+    """
+
     def __init__(
         self,
         workspace_path,
@@ -30,6 +43,15 @@ class ProcessTMD(ProcessBase):
         )
 
     def adec_xemtmd(self):
+        """
+        Process TMD files.
+
+        This method searches for VC0 xemt files in the TMD workspace directory,
+        creates a parameterFile.xml, and renders TMD files using the TemplateHandler.
+
+        Returns:
+            None
+        """
 
         dir_to_templates = os.path.join(
             self.workspace_path, "templates", "templates_tmd"

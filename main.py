@@ -1,8 +1,3 @@
-"""
-Modulo main
-
-"""
-
 import glob
 import os
 import shutil
@@ -18,10 +13,11 @@ WORKDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_config():
-    """_summary_
-        carga elarchivo de configuracion
+    """
+    Load the configuration file.
+
     Returns:
-        _type_: object
+        config object: The loaded configuration object.
     """
     try:
         pat_yaml = os.path.join(WORKDIR, "config_adec.yaml")
@@ -34,13 +30,14 @@ def load_config():
 
 
 def get_sat_platform(path_to_adq):
-    """_summary_
-        Obtiene el nombre de la plataforma del archivo DTTL
+    """
+    Get the name of the platform from the DTTL file.
+
     Args:
-        path_to_adq (_type_): Ruta a la adquisicion
+        path_to_adq (str): The path to the acquisition.
 
     Returns:
-        _type_: retorna el nombre de la plataforma
+        str: The name of the platform.
     """
     get_dtt_file = glob.glob(os.path.join(path_to_adq, "*DTTL*"))
     for dtt_file in get_dtt_file:
@@ -49,24 +46,26 @@ def get_sat_platform(path_to_adq):
 
 
 def check_tar_exists(workdir):
-    """_summary_
-        Checkea si existe algun archivo .tar dentro del directorio
+    """
+    Check if there are any .tar files in the directory.
+
     Args:
-        workdir object path: recibe la ruta de la carpeta de trabajo
+        workdir (str): The path to the working directory.
 
     Returns:
-        _type_: lista de archivos .tar
+        list: A list of .tar files.
     """
     workspaces = os.path.join(workdir, "workspaceTMD", "inputDir")
     return glob.glob(os.path.join(workspaces, "*.tar"))
 
 
 def prepare_folder(config_params, path_to_adq):
-    """_summary_
-    chequea si la carpeta esta vacia, si es asi intenta crear la estructura
+    """
+    Check if the folder is empty, if so, try to create the structure.
+
     Args:
-        config_params (_type_): parametros de la configuracion
-        path_to_adq (_type_): path a la adquisicion
+        config_params (object): The configuration parameters.
+        path_to_adq (str): The path to the acquisition.
     """
     if not check_tar_exists(path_to_adq):
         file_handler = FileHandler(
@@ -81,13 +80,17 @@ def prepare_folder(config_params, path_to_adq):
 
 
 def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
-    """_summary_
+    """
+    Move the acquisitions from the specified path to the output folder.
 
     Args:
-        path_to_adq (_type_): _description_
-        output_folder (_type_): _description_
+        path_to_adq (str): The path to the acquisitions folder.
+        output_folder (str): The path to the output folder.
+
+    Returns:
+        None
     """
-    log_adec.info(f"movig folder {path_to_adq} to {output_folder}")
+    log_adec.info(f"moving folder {path_to_adq} to {output_folder}")
     new_output_folder = os.path.join(output_folder, os.path.basename(path_to_adq))
     os.makedirs(new_output_folder, exist_ok=True)
     for file_name in os.listdir(path_to_adq):
@@ -102,10 +105,11 @@ def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
 
 
 def delete_folders(path):
-    """_summary_
+    """
+    Delete folders that start with "get_arch26_12" in the specified path.
 
     Args:
-        path (_type_): _description_
+        path (str): The path to the folder.
     """
     for folder_name in os.listdir(path):
         if folder_name.startswith("get_arch26_12"):
@@ -115,10 +119,11 @@ def delete_folders(path):
 
 
 def copy_folder_for_test(path):
-    """_summary_
+    """
+    Copy folders that start with "get_arch26_12" to the working directory.
 
     Args:
-        path (_type_): _description_
+        path (str): The path to the folder.
     """
     for folder_name in os.listdir(path):
         if folder_name.startswith("get_arch26_12"):
@@ -130,7 +135,7 @@ def copy_folder_for_test(path):
 
 def main():
     """
-        Arranca la tool
+    Start the tool.
     """
     log_adec.info("Start Adecuator")
     delete_folders(WORKDIR)

@@ -1,7 +1,8 @@
 import datetime
 import glob
 import os
-from xml.etree import ElementTree as ET
+
+from defusedxml import ElementTree as ET
 
 from Log import Log
 from process_base import ProcessBase
@@ -11,6 +12,17 @@ log_adec = Log(__name__)
 
 
 class ProcessSSP(ProcessBase):
+    """
+    A class for processing SSP (Space System Processor) files.
+
+    Args:
+        workspace_path (str): The path to the workspace.
+        temporal_parameterFile (str, optional): The path to the temporal parameter file. Defaults to None.
+        parameterFile (str, optional): The path to the parameter file. Defaults to None.
+        config_params (dict, optional): Configuration parameters. Defaults to None.
+        adq_id (str, optional): The ADQ ID. Defaults to None.
+        path_to_adq (str, optional): The path to the ADQ. Defaults to None.
+    """
 
     def __init__(
         self,
@@ -32,24 +44,33 @@ class ProcessSSP(ProcessBase):
         # self.workspace_path = workspace_path
 
     def _get_most_recent_file(self, files):
+        """
+        Get the most recent file from a list of files.
+
+        Args:
+            files (list): A list of file paths.
+
+        Returns:
+            str: The path to the most recent file.
+        """
         most_recent_file = None
         most_recent_date = None
 
         for file in files:
-            # Parsea el archivo XML
+            # Parse the XML file
             tree = ET.parse(file)
             root = tree.getroot()
 
-            # Busca el tag 'productionTime'
+            # Find the 'productionTime' tag
             production_time = root.find(".//productionTime")
 
-            # Si el tag existe, extrae la fecha
+            # If the tag exists, extract the date
             if production_time is not None:
                 date = datetime.datetime.strptime(
                     production_time.text, "%Y-%m-%dT%H:%M:%S"
                 )
 
-                # Si la fecha es más reciente que la más reciente hasta ahora, actualiza la más reciente
+                # If the date is more recent than the current most recent date, update the most recent file
                 if most_recent_date is None or date > most_recent_date:
                     most_recent_date = date
                     most_recent_file = file
@@ -57,6 +78,12 @@ class ProcessSSP(ProcessBase):
         return most_recent_file
 
     def adec_ssp_parametter_file(self, platform):
+        """
+        Adecuate the SSP parameter file.
+
+        Args:
+            platform (str): The platform name.
+        """
         dir_to_templates = os.path.join(
             self.workspace_path, "templates", "templates_ssp"
         )
@@ -81,21 +108,21 @@ class ProcessSSP(ProcessBase):
                 matching_files[key] = self._get_most_recent_file(files)
 
         if "o" in matching_files and "r" in matching_files:
-            log_adec.info("Creando archivo parameterFile.xml")
+            log_adec.info("Creating parameterFile.xml")
             th.render_ssp_input(
                 "parameterFile.xml",
                 os.path.join(dest_parametters_files, "parameterFile.xml"),
                 matching_files["o"],
                 matching_files["r"],
             )
-            log_adec.info("Creando archivo parameterFile_OFFLINEFAST.xml")
+            log_adec.info("Creating parameterFile_OFFLINEFAST.xml")
             th.render_ssp_offline_fast(
                 "parameterFile_OFFLINEFAST.xml",
                 os.path.join(dest_parametters_files, "parameterFile_OFFLINEFAST.xml"),
                 matching_files["o"],
                 matching_files["r"],
             )
-            log_adec.info("Creando archivo parameterFile_ARG2.xml")
+            log_adec.info("Creating parameterFile_ARG2.xml")
             th.render_arg2(
                 "parameterFile_ARG2.xml",
                 os.path.join(dest_parametters_files, "parameterFile_ARG2.xml"),
@@ -104,14 +131,14 @@ class ProcessSSP(ProcessBase):
             )
 
         if "o" in matching_files and "f" in matching_files:
-            log_adec.info("Creando archivo parameterFile_OFFLINE.xml")
+            log_adec.info("Creating parameterFile_OFFLINE.xml")
             th.render_ssp_offline(
                 "parameterFile_OFFLINE.xml",
                 os.path.join(dest_parametters_files, "parameterFile_OFFLINE.xml"),
                 matching_files["o"],
                 matching_files["f"],
             )
-            log_adec.info("Creando archivo parameterFile_OFFLINEFASTFINAL.xml")
+            log_adec.info("Creating parameterFile_OFFLINEFASTFINAL.xml")
             th.render_offline_fast_final(
                 "parameterFile_OFFLINEFASTFINAL.xml",
                 os.path.join(
@@ -126,7 +153,7 @@ class ProcessSSP(ProcessBase):
             and "f" in matching_files
             and "teigr" in matching_files
         ):
-            log_adec.info("Creando archivo parameterFile_ARG3.xml")
+            log_adec.info("Creating parameterFile_ARG3.xml")
             th.render_arg3(
                 "parameterFile_ARG3.xml",
                 os.path.join(dest_parametters_files, "parameterFile_ARG3.xml"),
@@ -134,16 +161,16 @@ class ProcessSSP(ProcessBase):
                 matching_files["f"],
                 matching_files["teigr"],
             )
-        log_adec.info("Creando archivo parameterFile_ONLINEVERYFAST.xml")
+        log_adec.info("Creating parameterFile_ONLINEVERYFAST.xml")
         th.render_online_very_fast(
             "parameterFile_ONLINEVERYFAST.xml",
             os.path.join(dest_parametters_files, "parameterFile_ONLINEVERYFAST.xml"),
         )
-        log_adec.info("Creando archivo parameterFile_ARG1.xml")
+        log_adec.info("Creating parameterFile_ARG1.xml")
         th.render_arg1(
             "parameterFile_ARG1.xml",
             os.path.join(dest_parametters_files, "parameterFile_ARG1.xml"),
         )
 
         for file in matching_files.values():
-            log_adec.info(f"El archivo mas reciente es {file}")
+            log_adec.info(f"The most recent file is {file}")
