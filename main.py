@@ -137,6 +137,8 @@ def main():
     """
     Start the tool.
     """
+    file_handler = FileHandler(WORKDIR)
+    file_handler.create_log_folder()
     log_adec.info("Start Adecuator")
     delete_folders(WORKDIR)
     copy_folder_for_test("adquisiciones")
@@ -144,7 +146,7 @@ def main():
     config_params = load_config()
     handler = ArgumentHandler()
     args = handler.get_arguments()
-    file_handler = FileHandler(WORKDIR)
+
     acquisition_folder = file_handler.open_txt_(args.lista_adquisiciones)
 
     for adquisition in acquisition_folder:

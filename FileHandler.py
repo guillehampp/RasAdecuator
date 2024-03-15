@@ -64,3 +64,9 @@ class FileHandler:
         except Exception as e:
             log_adec.error(f"Error al crear la estructura: {e}")
             return False
+
+    def create_log_folder(self):
+        log_folder = os.path.join(self.file_path, "log")
+        if not os.path.exists(log_folder):
+            os.mkdir(log_folder)
+        return log_folder
