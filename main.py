@@ -9,7 +9,8 @@ from Log import Log
 from YamlLoader import YamlLoader
 
 log_adec = Log(__name__)
-WORKDIR = os.path.dirname(os.path.abspath(__file__))
+WORKDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TOOLDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_config():
@@ -20,7 +21,7 @@ def load_config():
         config object: The loaded configuration object.
     """
     try:
-        pat_yaml = os.path.join(WORKDIR, "config_adec.yaml")
+        pat_yaml = os.path.join(TOOLDIR, "config_adec.yaml")
         log_adec.info(f"Path to config file: {pat_yaml}")
     except Exception as e:
         log_adec.error(f"Failed to load YAML file: {str(e)}")
@@ -137,11 +138,11 @@ def main():
     """
     Start the tool.
     """
-    file_handler = FileHandler(WORKDIR)
+    file_handler = FileHandler(TOOLDIR)
     file_handler.create_log_folder()
     log_adec.info("Start Adecuator")
-    delete_folders(WORKDIR)
-    copy_folder_for_test("adquisiciones")
+    # delete_folders(WORKDIR)
+    # copy_folder_for_test("adquisiciones")
     log_adec.info("Loading config file")
     config_params = load_config()
     handler = ArgumentHandler()

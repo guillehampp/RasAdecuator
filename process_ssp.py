@@ -9,6 +9,7 @@ from process_base import ProcessBase
 from templates import TemplateHandler
 
 log_adec = Log(__name__)
+TOOLDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class ProcessSSP(ProcessBase):
@@ -27,16 +28,12 @@ class ProcessSSP(ProcessBase):
     def __init__(
         self,
         workspace_path,
-        temporal_parameterFile=None,
-        parameterFile=None,
         config_params=None,
         adq_id=None,
         path_to_adq=None,
     ):
         super().__init__(
             workspace_path,
-            temporal_parameterFile,
-            parameterFile,
             config_params,
             adq_id,
             path_to_adq,
@@ -84,9 +81,7 @@ class ProcessSSP(ProcessBase):
         Args:
             platform (str): The platform name.
         """
-        dir_to_templates = os.path.join(
-            self.workspace_path, "templates", "templates_ssp"
-        )
+        dir_to_templates = os.path.join(TOOLDIR, "templates", "templates_ssp")
         dest_parametters_files = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_ssp_input")
         )

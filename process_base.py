@@ -55,6 +55,7 @@ class ProcessBase:
         """
         if path_dttl is None:
             path_dttl = self.path_to_adq
+        print("Path to dttl", path_dttl)
         return sorted(glob.glob(os.path.join(path_dttl, f"*{file_extension}*")))
 
     def move_files(self, files, destination_folder):
