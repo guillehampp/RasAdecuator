@@ -52,10 +52,17 @@ class ProcessBase:
         Returns:
             list: A sorted list of file paths matching the given file extension.
 
+        Raises:
+            FileNotFoundError: If no files with the given extension are found in the given path.
         """
         if path_dttl is None:
             path_dttl = self.path_to_adq
-        return sorted(glob.glob(os.path.join(path_dttl, f"*{file_extension}*")))
+        files = sorted(glob.glob(os.path.join(path_dttl, f"*{file_extension}*")))
+        if not files:
+            error_message = f"No se encontraron archivos con la extensión {file_extension} en {path_dttl}"
+            log_adec.error(error_message)
+            raise FileNotFoundError(error_message)
+        return files
 
     def move_files(self, files, destination_folder):
         """
@@ -63,23 +70,48 @@ class ProcessBase:
 
         Args:
             files (str or list): The file(s) to be moved. If a string is provided, it will be treated as a single file.
-                                 If a list is provided, it will be treated as multiple files.
+                                If a list is provided, it will be treated as multiple files.
             destination_folder (str): The destination folder where the files will be moved to.
 
         Returns:
             None
 
         Raises:
-            None
-
+            FileNotFoundError: If a file does not exist.
+            PermissionError: If a file cannot be moved due to insufficient permissions.
+            NotADirectoryError: If the destination folder does not exist.
+            IsADirectoryError: If a directory is provided instead of a file.
+            OSError: If an OS error occurs.
+            shutil.Error: If an error occurs during the move operation.
         """
         if isinstance(files, str):
             files = [files]
 
+        # Verifica si el directorio de destino existe antes de intentar mover los archivos
+        if not os.path.isdir(destination_folder):
+            error_message = (
+                f"El directorio de destino '{destination_folder}' no existe."
+            )
+            log_adec.error(error_message)
+            raise NotADirectoryError(error_message)
+
         for v_file in files:
             # Verifica si el archivo existe antes de intentar moverlo
             if os.path.isfile(v_file):
-                log_adec.info(f"Moving {v_file} to {destination_folder}")
-                shutil.move(v_file, destination_folder)
+                try:
+                    log_adec.info(f"Moving {v_file} to {destination_folder}")
+                    shutil.move(v_file, destination_folder)
+                except PermissionError:
+                    error_message = (
+                        f"No se pudo mover '{v_file}' debido a permisos insuficientes"
+                    )
+                    log_adec.error(error_message)
+                    raise PermissionError(error_message)
+                except (IsADirectoryError, OSError, shutil.Error) as e:
+                    error_message = f"Ocurrió un error al mover '{v_file}': {str(e)}"
+                    log_adec.error(error_message)
+                    raise
             else:
-                log_adec.error(f"'{v_file}' no existe y no se moverá.")
+                error_message = f"'{v_file}' no existe y no se moverá."
+                log_adec.error(error_message)
+                raise FileNotFoundError(error_message)

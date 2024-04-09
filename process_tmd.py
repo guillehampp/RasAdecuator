@@ -48,7 +48,6 @@ class ProcessTMD(ProcessBase):
         Returns:
             None
         """
-        print("El workdir es", self.workspace_path)
 
         dir_to_templates = os.path.join(
             self.workspace_path, "templates", "templates_tmd"
@@ -66,12 +65,9 @@ class ProcessTMD(ProcessBase):
                     )
                 )
                 log_adec.info(f"Se encontro el archivo {filename}")
-        dest_parametters_files = os.path.join(
-            self.path_to_adq, self.config_params.get("workspace_tmd_input")
-        )
-        log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
+        log_adec.info(f"Creando archivo parameterFile.xml en {workdir_tmd}")
         th.render_tmd_files(
             lista_vc0_xemt,
             "parameterFile.xml",
-            os.path.join(dest_parametters_files, "parameterFile.xml"),
+            os.path.join(workdir_tmd, "parameterFile.xml"),
         )

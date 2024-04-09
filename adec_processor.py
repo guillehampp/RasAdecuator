@@ -26,7 +26,6 @@ class AdecProcessor:
         )
         log_adec.info("Moving .vc0 files to TMD input folder")
         vc0_files = adec_tmd.find_files("_VC0_")
-        print("Vcos file encontrados", vc0_files)
         destination_folder = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_tmd_input")
         )

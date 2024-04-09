@@ -1,6 +1,7 @@
 import os
 import shutil
 
+from custom_exceptions import FolderCreationError
 from Log import Log
 
 log_adec = Log(__name__)
@@ -60,10 +61,13 @@ class FileHandler:
         file_handler = FileHandler(full_template_path)
         try:
             file_handler.copy_folder_content(self.path_to_adq)
-            return True
         except Exception as e:
-            log_adec.error(f"Error al crear la estructura: {e}")
-            return False
+            error_message = f"Error al crear la estructura en {self.path_to_adq} desde {full_template_path}: {e}"
+            log_adec.error(error_message)
+            raise FolderCreationError(self.path_to_adq, full_template_path, e)
+        else:
+            log_adec.info(f"Se ha creado la carpeta {self.path_to_adq}")
+            return True
 
     def create_log_folder(self):
         log_folder = os.path.join(self.file_path, "log")

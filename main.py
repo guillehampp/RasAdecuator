@@ -9,7 +9,6 @@ from Log import Log
 from YamlLoader import YamlLoader
 
 log_adec = Log(__name__)
-# WORKDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLDIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -39,8 +38,15 @@ def get_sat_platform(path_to_adq):
 
     Returns:
         str: The name of the platform.
+
+    Raises:
+        FileNotFoundError: If no DTTL file is found in the given path.
     """
     get_dtt_file = glob.glob(os.path.join(path_to_adq, "*DTTL*"))
+    if not get_dtt_file:
+        error_message = f"No se encontró ningún archivo DTTL en {path_to_adq}"
+        log_adec.error(error_message)
+        raise FileNotFoundError(error_message)
     for dtt_file in get_dtt_file:
         platform = os.path.basename(dtt_file).split("_")[0]
     return platform
@@ -74,54 +80,39 @@ def prepare_folder(config_params, path_to_adq):
         )
         if file_handler.create_folder_structure():
             log_adec.info(f"Se ha creado la carpeta {path_to_adq}")
-        else:
-            log_adec.error(f"Error al crear la carpeta {path_to_adq}")
     else:
         log_adec.error("Contiene archivos .tar")
+        raise Exception("El directorio contiene archivos .tar")
 
 
-def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
-    """
-    Move the acquisitions from the specified path to the output folder.
-
-    Args:
-        path_to_adq (str): The path to the acquisitions folder.
-        output_folder (str): The path to the output folder.
-
-    Returns:
-        None
-    """
-    log_adec.info(f"moving folder {path_to_adq} to {output_folder}")
-    new_output_folder = os.path.join(output_folder, os.path.basename(path_to_adq))
-    os.makedirs(new_output_folder, exist_ok=True)
-    for file_name in os.listdir(path_to_adq):
-        src_file = os.path.join(path_to_adq, file_name)
-        dst_file = os.path.join(new_output_folder, file_name)
-        if os.path.exists(dst_file):
-            if os.path.isfile(dst_file):
-                os.remove(dst_file)
-            elif os.path.isdir(dst_file):
-                shutil.rmtree(dst_file)
-        shutil.move(src_file, dst_file)
-
-
-def delete_folders(path):
-    """
-    Delete folders that start with "get_arch26_12" in the specified path.
-
-    Args:
-        path (str): The path to the folder.
-    """
-    for folder_name in os.listdir(path):
-        if folder_name.startswith("get_arch26_12"):
-            folder_path = os.path.join(path, folder_name)
-            if os.path.isdir(folder_path):
-                shutil.rmtree(folder_path)
-
-
-# def copy_folder_for_test(path):
+# def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
 #     """
-#     Copy folders that start with "get_arch26_12" to the working directory.
+#     Move the acquisitions from the specified path to the output folder.
+
+#     Args:
+#         path_to_adq (str): The path to the acquisitions folder.
+#         output_folder (str): The path to the output folder.
+
+#     Returns:
+#         None
+#     """
+#     log_adec.info(f"moving folder {path_to_adq} to {output_folder}")
+#     new_output_folder = os.path.join(output_folder, os.path.basename(path_to_adq))
+#     os.makedirs(new_output_folder, exist_ok=True)
+#     for file_name in os.listdir(path_to_adq):
+#         src_file = os.path.join(path_to_adq, file_name)
+#         dst_file = os.path.join(new_output_folder, file_name)
+#         if os.path.exists(dst_file):
+#             if os.path.isfile(dst_file):
+#                 os.remove(dst_file)
+#             elif os.path.isdir(dst_file):
+#                 shutil.rmtree(dst_file)
+#         shutil.move(src_file, dst_file)
+
+
+# def delete_folders(path):
+#     """
+#     Delete folders that start with "get_arch26_12" in the specified path.
 
 #     Args:
 #         path (str): The path to the folder.
@@ -130,8 +121,7 @@ def delete_folders(path):
 #         if folder_name.startswith("get_arch26_12"):
 #             folder_path = os.path.join(path, folder_name)
 #             if os.path.isdir(folder_path):
-#                 dest_path = os.path.join(WORKDIR, folder_name)
-#                 shutil.copytree(folder_path, dest_path)
+#                 shutil.rmtree(folder_path)
 
 
 def main():
@@ -141,8 +131,6 @@ def main():
     file_handler = FileHandler(TOOLDIR)
     file_handler.create_log_folder()
     log_adec.info("Start Adecuator")
-    # delete_folders(WORKDIR)
-    # copy_folder_for_test("adquisiciones")
     log_adec.info("Loading config file")
     config_params = load_config()
     handler = ArgumentHandler()
