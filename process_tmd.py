@@ -7,8 +7,6 @@ from templates import TemplateHandler
 
 log_adec = Log(__name__)
 
-TOOLDIR = os.path.dirname(os.path.abspath(__file__))
-
 
 class ProcessTMD(ProcessBase):
     """
@@ -50,9 +48,11 @@ class ProcessTMD(ProcessBase):
         Returns:
             None
         """
-        print("El workdir es", TOOLDIR)
+        print("El workdir es", self.workspace_path)
 
-        dir_to_templates = os.path.join(TOOLDIR, "templates", "templates_tmd")
+        dir_to_templates = os.path.join(
+            self.workspace_path, "templates", "templates_tmd"
+        )
         th = TemplateHandler(dir_to_templates)
         workdir_tmd = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_tmd_input")

@@ -7,7 +7,6 @@ from process_base import ProcessBase
 from templates import TemplateHandler
 
 log_adec = Log(__name__)
-TOOLDIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class ProcessL0(ProcessBase):
@@ -150,7 +149,9 @@ class ProcessL0(ProcessBase):
                         "/opt/sao/appsharedfiles/L0F01/workspace/inputDir/", f_name
                     )
                 )
-        dir_to_templates = os.path.join(TOOLDIR, "templates", "templates_l0")
+        dir_to_templates = os.path.join(
+            self.workspace_path, "templates", "templates_l0"
+        )
         th = TemplateHandler(dir_to_templates)
         log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
         th.render_ras_file(

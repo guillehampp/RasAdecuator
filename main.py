@@ -9,7 +9,7 @@ from Log import Log
 from YamlLoader import YamlLoader
 
 log_adec = Log(__name__)
-WORKDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# WORKDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLDIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -70,7 +70,7 @@ def prepare_folder(config_params, path_to_adq):
     """
     if not check_tar_exists(path_to_adq):
         file_handler = FileHandler(
-            WORKDIR, config_params=config_params, adq_id=None, path_to_adq=path_to_adq
+            TOOLDIR, config_params=config_params, adq_id=None, path_to_adq=path_to_adq
         )
         if file_handler.create_folder_structure():
             log_adec.info(f"Se ha creado la carpeta {path_to_adq}")
@@ -119,19 +119,19 @@ def delete_folders(path):
                 shutil.rmtree(folder_path)
 
 
-def copy_folder_for_test(path):
-    """
-    Copy folders that start with "get_arch26_12" to the working directory.
+# def copy_folder_for_test(path):
+#     """
+#     Copy folders that start with "get_arch26_12" to the working directory.
 
-    Args:
-        path (str): The path to the folder.
-    """
-    for folder_name in os.listdir(path):
-        if folder_name.startswith("get_arch26_12"):
-            folder_path = os.path.join(path, folder_name)
-            if os.path.isdir(folder_path):
-                dest_path = os.path.join(WORKDIR, folder_name)
-                shutil.copytree(folder_path, dest_path)
+#     Args:
+#         path (str): The path to the folder.
+#     """
+#     for folder_name in os.listdir(path):
+#         if folder_name.startswith("get_arch26_12"):
+#             folder_path = os.path.join(path, folder_name)
+#             if os.path.isdir(folder_path):
+#                 dest_path = os.path.join(WORKDIR, folder_name)
+#                 shutil.copytree(folder_path, dest_path)
 
 
 def main():
@@ -158,7 +158,7 @@ def main():
         log_adec.info(f"Platform: {platform}")
         prepare_folder(config_params, path_to_adq)
         adec_processor = AdecProcessor(
-            WORKDIR, config_params, adquisition, path_to_adq, platform
+            TOOLDIR, config_params, adquisition, path_to_adq, platform
         )
         log_adec.info("Start adecuating TMD files")
         adec_processor.input_files_tmd()
@@ -168,9 +168,9 @@ def main():
         adec_processor.adec_l0f()
         log_adec.info("Start adecuating SPP files")
         adec_processor.adec_ssp()
-        mover_adqusiciones_adecuadas(
-            path_to_adq, os.path.join("/usr/src/app/", args.output_folder)
-        )
+        # mover_adqusiciones_adecuadas(
+        #     path_to_adq, os.path.join(p, path_to_adq)
+        # )
 
 
 if __name__ == "__main__":

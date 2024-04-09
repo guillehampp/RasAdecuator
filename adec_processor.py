@@ -21,7 +21,7 @@ class AdecProcessor:
             self.workdir,
             config_params=self.config_params,
             adq_id=self.adquisition,
-            path_to_adq=os.path.join(self.workdir, self.adquisition),
+            path_to_adq=self.path_to_adq,
             platform=self.platform,
         )
         log_adec.info("Moving .vc0 files to TMD input folder")
@@ -50,7 +50,7 @@ class AdecProcessor:
             self.workdir,
             config_params=self.config_params,
             adq_id=self.adquisition,
-            path_to_adq=os.path.join(self.workdir, self.adquisition),
+            path_to_adq=self.path_to_adq,
         )
         log_adec.info("Finding DTTL files to move to L0F input folder")
         dttl_files = adec_l0f.find_files("_DTTL__")
@@ -66,7 +66,7 @@ class AdecProcessor:
             self.workdir,
             config_params=self.config_params,
             adq_id=self.adquisition,
-            path_to_adq=os.path.join(self.workdir, self.adquisition),
+            path_to_adq=self.path_to_adq,
         )
         ephems = adec_ssp.find_files(self.platform + "_*_*_EPHEMS")
         quatrn = adec_ssp.find_files(self.platform + "_*_*_QUATRN")
