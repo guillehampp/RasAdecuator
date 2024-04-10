@@ -20,11 +20,11 @@ class FileHandler:
             os.mkdir(adq_id_fodler)
 
     def open_txt_(self, file_name):
-        file_path = os.path.join(self.file_path, self.file_path)
+        file_path = os.path.join(self.file_path)
         if not os.path.exists(file_path):
             log_adec.error(f"File not found: {file_path}")
             return False
-        with open(file_path + "/" + file_name, "r") as file:
+        with open(file_name, "r") as file:
             log_adec.info(f"File opened: {file_path}")
             data = [line.strip() for line in file.readlines()]
         return data

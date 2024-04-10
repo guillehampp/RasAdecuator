@@ -1,6 +1,6 @@
 import glob
 import os
-import shutil
+
 
 from adec_processor import AdecProcessor
 from ArgumentHandler import ArgumentHandler
@@ -85,44 +85,6 @@ def prepare_folder(config_params, path_to_adq):
         raise Exception("El directorio contiene archivos .tar")
 
 
-# def mover_adqusiciones_adecuadas(path_to_adq, output_folder):
-#     """
-#     Move the acquisitions from the specified path to the output folder.
-
-#     Args:
-#         path_to_adq (str): The path to the acquisitions folder.
-#         output_folder (str): The path to the output folder.
-
-#     Returns:
-#         None
-#     """
-#     log_adec.info(f"moving folder {path_to_adq} to {output_folder}")
-#     new_output_folder = os.path.join(output_folder, os.path.basename(path_to_adq))
-#     os.makedirs(new_output_folder, exist_ok=True)
-#     for file_name in os.listdir(path_to_adq):
-#         src_file = os.path.join(path_to_adq, file_name)
-#         dst_file = os.path.join(new_output_folder, file_name)
-#         if os.path.exists(dst_file):
-#             if os.path.isfile(dst_file):
-#                 os.remove(dst_file)
-#             elif os.path.isdir(dst_file):
-#                 shutil.rmtree(dst_file)
-#         shutil.move(src_file, dst_file)
-
-
-# def delete_folders(path):
-#     """
-#     Delete folders that start with "get_arch26_12" in the specified path.
-
-#     Args:
-#         path (str): The path to the folder.
-#     """
-#     for folder_name in os.listdir(path):
-#         if folder_name.startswith("get_arch26_12"):
-#             folder_path = os.path.join(path, folder_name)
-#             if os.path.isdir(folder_path):
-#                 shutil.rmtree(folder_path)
-
 
 def main():
     """
@@ -140,7 +102,7 @@ def main():
 
     for adquisition in acquisition_folder:
         log_adec.info(f"Adecuando adquisicion: {adquisition}")
-        path_to_adq = os.path.abspath(os.path.join(args.path, adquisition))
+        path_to_adq = os.path.abspath(os.path.join(args.path,adquisition))
         log_adec.info(f"Path to adquisition: {path_to_adq}")
         platform = get_sat_platform(path_to_adq)
         log_adec.info(f"Platform: {platform}")
@@ -155,7 +117,9 @@ def main():
         log_adec.info("Start adecuating L0F files")
         adec_processor.adec_l0f()
         log_adec.info("Start adecuating SPP files")
+
         adec_processor.adec_ssp()
+
         # mover_adqusiciones_adecuadas(
         #     path_to_adq, os.path.join(p, path_to_adq)
         # )

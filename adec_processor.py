@@ -25,7 +25,7 @@ class AdecProcessor:
             platform=self.platform,
         )
         log_adec.info("Moving .vc0 files to TMD input folder")
-        vc0_files = adec_tmd.find_files("_VC0_")
+        vc0_files = adec_tmd.find_files("*_VC0_*")
         destination_folder = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_tmd_input")
         )
@@ -52,11 +52,11 @@ class AdecProcessor:
             path_to_adq=self.path_to_adq,
         )
         log_adec.info("Finding DTTL files to move to L0F input folder")
-        dttl_files = adec_l0f.find_files("_DTTL__")
+        dttl_files = adec_l0f.find_files("*_DTTL___*")
         recent_dttl_files = adec_l0f.get_recent_files(dttl_files)
         log_adec.info(f"Most resent DTTL files found: {recent_dttl_files}")
         log_adec.info("Moving ras files to L0F input folder")
-        ras_list = adec_l0f.ras_files(os.path.join(self.workdir, self.adquisition))
+        ras_list = adec_l0f.ras_files(self.path_to_adq)
         adec_l0f.move_input_file(ras_list, recent_dttl_files)
         adec_l0f.adec_xeml0f()
 
@@ -67,9 +67,12 @@ class AdecProcessor:
             adq_id=self.adquisition,
             path_to_adq=self.path_to_adq,
         )
-        ephems = adec_ssp.find_files(self.platform + "_*_*_EPHEMS")
-        quatrn = adec_ssp.find_files(self.platform + "_*_*_QUATRN")
-        tecigr = adec_ssp.find_files(self.platform + "_*_*_TECIGR")
+        
+        ephems = adec_ssp.find_files(self.platform + "_*_*_EPHEMS_*")
+        #S1A_OPER_ODF_EPHEMS_CODS_20231206T221828_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt
+        print("La plataforma es:",self.platform )
+        quatrn = adec_ssp.find_files(self.platform + "_*_*_QUATRN_*")
+        tecigr = adec_ssp.find_files(self.platform + "_*_*_TECIGR_*")
         all_files = ephems + quatrn + tecigr
         dest_input_file_ssp = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_ssp_input")

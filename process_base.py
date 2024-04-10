@@ -41,28 +41,28 @@ class ProcessBase:
         self.path_to_adq = path_to_adq
         self.platform = platform
 
-    def find_files(self, file_extension, path_dttl=None):
+    def find_files(self, file_pattern,path_to_find=None):
         """
-        Find files with a specific file extension in a given directory.
+        Find files matching the given pattern.
 
         Args:
-            file_extension (str): The file extension to search for.
-            path_dttl (str, optional): The directory path to search in. If not provided, the default path will be used.
+            file_pattern (str): The file pattern to search for.
 
         Returns:
-            list: A sorted list of file paths matching the given file extension.
-
-        Raises:
-            FileNotFoundError: If no files with the given extension are found in the given path.
+            list: A list of file paths matching the given pattern. If no files are found, an empty list is returned.
         """
-        if path_dttl is None:
-            path_dttl = self.path_to_adq
-        files = sorted(glob.glob(os.path.join(path_dttl, f"*{file_extension}*")))
+        if path_to_find is None:
+            path_to_find = self.path_to_adq
+        print("El path a la adq es", path_to_find)
+        files = glob.glob(os.path.join(path_to_find, file_pattern))
+        print("Los archivos encontrados son", files)
         if not files:
-            error_message = f"No se encontraron archivos con la extensión {file_extension} en {path_dttl}"
+            error_message = f"No se encontraron archivos con el patrón '{file_pattern}' en {path_to_find}"
             log_adec.error(error_message)
-            raise FileNotFoundError(error_message)
+            return []  # Devuelve una lista vacía en lugar de lanzar una excepción
+
         return files
+
 
     def move_files(self, files, destination_folder):
         """

@@ -44,7 +44,6 @@ class ProcessL0(ProcessBase):
 
         # Filtra la lista para excluir los archivos que contienen "VC0" en su nombre
         files = [file for file in files_vc if "VC0" not in file]
-
         if not files:
             error_message = f"No se encontraron archivos que contienen 'VC' (excluyendo 'VC0') en {path_to_files}"
             log_adec.error(error_message)
@@ -52,7 +51,7 @@ class ProcessL0(ProcessBase):
 
         # Ordena la lista de archivos
         files.sort()
-
+        return files
     def get_recent_files(self, dttl_files):
         """
         Returns a list of the most recent files from the given list of files.
@@ -66,6 +65,7 @@ class ProcessL0(ProcessBase):
         Raises:
             FileNotFoundError: If no files ending with 'xemt' or 'xml' are found in the given list.
         """
+
         # Filtrar la lista de archivos para incluir solo los que terminan en 'xemt'
         xemt_files = [f for f in dttl_files if f.endswith("xemt")]
         # Filtrar la lista de archivos para incluir solo los que terminan en 'xml'
@@ -129,6 +129,8 @@ class ProcessL0(ProcessBase):
         """
         nueva_ruta = "/opt/sao/appsharedfiles/L0F01/workspace/inputDir/"
         lista = []
+        print("Los dttls son", dttls)
+
         for x in dttls:
             if os.path.isfile(x):
                 lista.append(os.path.join(nueva_ruta, os.path.basename(x)))
@@ -151,8 +153,15 @@ class ProcessL0(ProcessBase):
             self.path_to_adq, self.config_params.get("workspace_l0f_input")
         )
         lista_vc_xemt = []
-        real_dtt_path = self.get_real_dttl_path(dest_parametters_files)
-        for filename in dest_parametters_files:
+        get_ras_files = self.ras_files(
+           dest_parametters_files
+        )
+        get_dttl_file = self.find_files(
+            "*_DTTL___*",dest_parametters_files
+   
+        )
+        real_dtt_path = self.get_real_dttl_path(get_dttl_file)
+        for filename in get_ras_files:
             f_name = os.path.basename(filename)
             if re.match(
                 r"S1[AB]_OPER_SAR_RAS____IMT_VC[1-9]_", f_name
