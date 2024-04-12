@@ -9,3 +9,6 @@ tmp
 get_arch26*
 adecuator_log_*
 ras_adecuator.tar
+dist/
+build/
+RasAdecuator.egg-info/
