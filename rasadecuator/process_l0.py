@@ -132,14 +132,12 @@ class ProcessL0(ProcessBase):
         lista = []
 
         for x in dttls:
-            print("el real dtt path es:", x)
             if os.path.isfile(x):
                 lista.append(os.path.join(nueva_ruta, os.path.basename(x)))
             else:
                 error_message = f"'{x}' no existe."
                 log_adec.error(error_message)
                 raise FileNotFoundError(error_message)
-        print(lista)
         return lista
 
     def adec_xeml0f(self):

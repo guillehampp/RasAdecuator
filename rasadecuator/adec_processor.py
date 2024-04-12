@@ -17,6 +17,7 @@ class AdecProcessor:
         self.platform = platform
 
     def input_files_tmd(self):
+        return_code = 0
         adec_tmd = ProcessTMD(
             self.workdir,
             config_params=self.config_params,
@@ -30,9 +31,11 @@ class AdecProcessor:
             self.path_to_adq, self.config_params.get("workspace_tmd_input")
         )
         if not vc0_files:
+            return_code = 1
             log_adec.error("No se encontraron archivos .vc0")
         else:
             adec_tmd.move_files(vc0_files, destination_folder)
+        return return_code
 
     def adec_xemtmd(self):
         adec_tmd = ProcessTMD(

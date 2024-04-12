@@ -1,5 +1,6 @@
 import glob
 import os
+import shutil
 
 
 from rasadecuator.adec_processor import AdecProcessor
@@ -84,7 +85,21 @@ def prepare_folder(config_params, path_to_adq):
         log_adec.error("Contiene archivos .tar")
         raise Exception("El directorio contiene archivos .tar")
 
+def mover_adquisiciones_adecuadas(path_to_adq):
+    """
+    Move the adecuated acquisitions to the adecuated folder.
 
+    Args:
+        path_to_adq (str): The path to the acquisition.
+        dest_adquisicion_adecuada (str): Destino de adquisicion adecuada.
+    """
+    dest_adquisicion_adecuada =  "/home/administrator/disk2tb/process_folder"
+    try:
+        shutil.move(path_to_adq, dest_adquisicion_adecuada)
+        log_adec.info(f"Se movió la adquisición {path_to_adq} a {dest_adquisicion_adecuada}")
+    except Exception as e:
+        log_adec.error(f"Error al mover la adquisición {path_to_adq} a {dest_adquisicion_adecuada}: {str(e)}")
+        raise
 
 def main():
     """
@@ -99,7 +114,7 @@ def main():
     args = handler.get_arguments()
 
     acquisition_folder = file_handler.open_txt_(args.lista_adquisiciones)
-
+    return_code = []
     for adquisition in acquisition_folder:
         log_adec.info(f"Adecuando adquisicion: {adquisition}")
         path_to_adq = os.path.abspath(os.path.join(args.path,adquisition))
@@ -111,7 +126,8 @@ def main():
             TOOLDIR, config_params, adquisition, path_to_adq, platform
         )
         log_adec.info("Start adecuating TMD files")
-        adec_processor.input_files_tmd()
+        ret_code = adec_processor.input_files_tmd()
+        return_code.append(ret_code)
         log_adec.info("Start adecuating TMD xemt files")
         adec_processor.adec_xemtmd()
         log_adec.info("Start adecuating L0F files")
@@ -120,9 +136,9 @@ def main():
 
         adec_processor.adec_ssp()
 
-        # mover_adqusiciones_adecuadas(
-        #     path_to_adq, os.path.join(p, path_to_adq)
-        # )
+        mover_adquisiciones_adecuadas(
+            path_to_adq
+        )
 
 
 if __name__ == "__main__":
