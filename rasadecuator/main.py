@@ -53,7 +53,7 @@ def get_sat_platform(path_to_adq):
     return platform
 
 
-def check_tar_exists(workdir):
+def check_tar_exists(workdir,config_params):
     """
     Check if there are any .tar files in the directory.
 
@@ -63,7 +63,7 @@ def check_tar_exists(workdir):
     Returns:
         list: A list of .tar files.
     """
-    workspaces = os.path.join(workdir, "workspaceTMD", "inputDir")
+    workspaces = os.path.join(workdir, config_params.get("workspace_tmd_input"))#"workspaceTMD", "inputDir"
     return glob.glob(os.path.join(workspaces, "*.tar"))
 
 
@@ -75,7 +75,7 @@ def prepare_folder(config_params, path_to_adq):
         config_params (object): The configuration parameters.
         path_to_adq (str): The path to the acquisition.
     """
-    if not check_tar_exists(path_to_adq):
+    if not check_tar_exists(path_to_adq,config_params):
         file_handler = FileHandler(
             TOOLDIR, config_params=config_params, adq_id=None, path_to_adq=path_to_adq
         )
@@ -85,7 +85,7 @@ def prepare_folder(config_params, path_to_adq):
         log_adec.error("Contiene archivos .tar")
         raise Exception("El directorio contiene archivos .tar")
 
-def mover_adquisiciones_adecuadas(path_to_adq):
+def mover_adquisiciones_adecuadas(path_to_adq,dest_adquisicion_adecuada):
     """
     Move the adecuated acquisitions to the adecuated folder.
 
@@ -93,7 +93,6 @@ def mover_adquisiciones_adecuadas(path_to_adq):
         path_to_adq (str): The path to the acquisition.
         dest_adquisicion_adecuada (str): Destino de adquisicion adecuada.
     """
-    dest_adquisicion_adecuada =  "/home/administrator/disk2tb/process_folder"
     try:
         shutil.move(path_to_adq, dest_adquisicion_adecuada)
         log_adec.info(f"Se movió la adquisición {path_to_adq} a {dest_adquisicion_adecuada}")
@@ -137,7 +136,7 @@ def main():
         adec_processor.adec_ssp()
 
         mover_adquisiciones_adecuadas(
-            path_to_adq
+            path_to_adq,config_params.get("adquisition_folder_dest")
         )
 
 

@@ -7,3 +7,4 @@ workspace_l0f_input: workspaceL0F/inputDir
 workspace_l0f_output: workspaceL0F/outputDir
 workspace_ssp_input: workspaceSSP/inputDir
 workspace_ssp_output: workspaceSSP/outputDir
+adquisition_folder_dest: /home/administrator/disk2tb/process_folder
