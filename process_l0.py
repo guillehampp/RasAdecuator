@@ -51,6 +51,7 @@ class ProcessL0(ProcessBase):
 
         # Ordena la lista de archivos
         files.sort()
+
         return files
     def get_recent_files(self, dttl_files):
         """
@@ -129,15 +130,16 @@ class ProcessL0(ProcessBase):
         """
         nueva_ruta = "/opt/sao/appsharedfiles/L0F01/workspace/inputDir/"
         lista = []
-        print("Los dttls son", dttls)
 
         for x in dttls:
+            print("el real dtt path es:", x)
             if os.path.isfile(x):
                 lista.append(os.path.join(nueva_ruta, os.path.basename(x)))
             else:
                 error_message = f"'{x}' no existe."
                 log_adec.error(error_message)
                 raise FileNotFoundError(error_message)
+        print(lista)
         return lista
 
     def adec_xeml0f(self):
@@ -164,7 +166,7 @@ class ProcessL0(ProcessBase):
         for filename in get_ras_files:
             f_name = os.path.basename(filename)
             if re.match(
-                r"S1[AB]_OPER_SAR_RAS____IMT_VC[1-9]_", f_name
+                r"S1[AB]_OPER_SAR_RAS____\w+_VC[1-9]_", f_name
             ) and filename.endswith(".xemt"):
                 lista_vc_xemt.append(
                     os.path.join(
@@ -178,7 +180,7 @@ class ProcessL0(ProcessBase):
         log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
         th.render_ras_file(
             lista_vc_xemt,
-            real_dtt_path[0],
+            real_dtt_path[1],
             "parameterFile.xml",
             os.path.join(dest_parametters_files, "parameterFile.xml"),
         )

@@ -53,9 +53,8 @@ class ProcessBase:
         """
         if path_to_find is None:
             path_to_find = self.path_to_adq
-        print("El path a la adq es", path_to_find)
         files = glob.glob(os.path.join(path_to_find, file_pattern))
-        print("Los archivos encontrados son", files)
+
         if not files:
             error_message = f"No se encontraron archivos con el patrón '{file_pattern}' en {path_to_find}"
             log_adec.error(error_message)

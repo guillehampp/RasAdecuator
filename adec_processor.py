@@ -70,7 +70,7 @@ class AdecProcessor:
         
         ephems = adec_ssp.find_files(self.platform + "_*_*_EPHEMS_*")
         #S1A_OPER_ODF_EPHEMS_CODS_20231206T221828_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt
-        print("La plataforma es:",self.platform )
+
         quatrn = adec_ssp.find_files(self.platform + "_*_*_QUATRN_*")
         tecigr = adec_ssp.find_files(self.platform + "_*_*_TECIGR_*")
         all_files = ephems + quatrn + tecigr

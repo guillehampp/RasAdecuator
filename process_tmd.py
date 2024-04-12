@@ -61,7 +61,7 @@ class ProcessTMD(ProcessBase):
             if re.match(f"{self.platform}_OPER_SAR_RAS__.*_VC0_.*\.xemt$", filename):
                 lista_vc0_xemt.append(
                     os.path.join(
-                        "opt/sao/appsharedfiles/TMD01/workspace/inputDir/", filename
+                        "/opt/sao/appsharedfiles/TMD01/workspace/inputDir/", filename
                     )
                 )
                 log_adec.info(f"Se encontro el archivo {filename}")
