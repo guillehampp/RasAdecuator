@@ -45,7 +45,10 @@ class AdecProcessor:
             path_to_adq=self.path_to_adq,
             platform=self.platform,
         )
-        adec_tmd.adec_xemtmd()
+        try:
+            adec_tmd.adec_xemtmd()
+        except ValueError as e:
+            log_adec.error(f"Error al procesar archivos TMD: {str(e)}")
 
     def adec_l0f(self):
         adec_l0f = ProcessL0(

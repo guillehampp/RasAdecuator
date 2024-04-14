@@ -66,8 +66,12 @@ class ProcessTMD(ProcessBase):
                 )
                 log_adec.info(f"Se encontro el archivo {filename}")
         log_adec.info(f"Creando archivo parameterFile.xml en {workdir_tmd}")
-        th.render_tmd_files(
-            lista_vc0_xemt,
-            "parameterFile.xml",
-            os.path.join(workdir_tmd, "parameterFile.xml"),
-        )
+        if not lista_vc0_xemt:
+            log_adec.error("No se encontraron archivos VC0")
+            raise ValueError("La lista lista_vc0_xemt está vacía.")
+        else:
+            th.render_tmd_files(
+                lista_vc0_xemt,
+                "parameterFile.xml",
+                os.path.join(workdir_tmd, "parameterFile.xml"),
+            )

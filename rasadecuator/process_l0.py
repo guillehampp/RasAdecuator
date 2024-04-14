@@ -53,6 +53,19 @@ class ProcessL0(ProcessBase):
         files.sort()
 
         return files
+    def _control_dtt_xemt_xml_existance(self, dttl_files):
+        """
+        Checks if there are any files ending with 'xemt' and 'xml' in the given list of files.
+
+        Args:
+            dttl_files (list): A list of file names.
+
+        Returns:
+            bool: True if there are files ending with 'xemt' and 'xml' in the given list of files, False otherwise.
+        """
+        has_xemt = any(file.endswith("xemt") for file in dttl_files)
+        has_xml = any(file.endswith("xml") for file in dttl_files)
+        return has_xemt and has_xml
     def get_recent_files(self, dttl_files):
         """
         Returns a list of the most recent files from the given list of files.
@@ -66,7 +79,12 @@ class ProcessL0(ProcessBase):
         Raises:
             FileNotFoundError: If no files ending with 'xemt' or 'xml' are found in the given list.
         """
-
+        try:
+            if not self._control_dtt_xemt_xml_existance(dttl_files):
+                raise ValueError("No se encontraron archivos que terminen en 'xemt' y 'xml'.")
+        except ValueError as e:
+            log_adec.error(e)
+            raise
         # Filtrar la lista de archivos para incluir solo los que terminan en 'xemt'
         xemt_files = [f for f in dttl_files if f.endswith("xemt")]
         # Filtrar la lista de archivos para incluir solo los que terminan en 'xml'
