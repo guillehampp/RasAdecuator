@@ -27,12 +27,7 @@ class ArgumentHandler:
             help="Path a la lista de adquisiciones",
             required=True,
         )
-        self.parser.add_argument(
-            "-o",
-            "--output_folder",
-            help="Donde se moveran las adquisiciones adecuadas",
-            required=True,
-        )
+
 
     def get_arguments(self):
         args = self.parser.parse_args()
