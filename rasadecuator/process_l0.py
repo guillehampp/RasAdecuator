@@ -87,6 +87,7 @@ class ProcessL0(ProcessBase):
                 lo_files, key=lambda filename: re.split("_", filename)[10]
             )
             recent_files.append(recent_xemt_file)
+        return recent_files
 
     def get_recent_files(self, dttl_files):
         """
@@ -111,7 +112,7 @@ class ProcessL0(ProcessBase):
 
         self.check_file_existence()
         recent_files = self.find_recent_files(xemt_files)
-        recent_files = self.find_recent_files(xml_files)
+        recent_files.extend(self.find_recent_files(xml_files))
         # Encuentra el archivo xemt con el valor máximo en la posición 11 después de dividir el nombre del archivo
         # if xemt_files:
         #     recent_xemt_file = max(
@@ -172,7 +173,19 @@ class ProcessL0(ProcessBase):
                 log_adec.error(error_message)
                 raise FileNotFoundError(error_message)
         return lista
-
+    def __filter_ras(self,get_ras_files):
+        lista_vc_xemt = []
+        for filename in get_ras_files:
+            f_name = os.path.basename(filename)
+            if re.match(
+                r"S1[AB]_OPER_SAR_RAS____\w+_VC[1-9]_", f_name
+            ) and filename.endswith(".xemt"):
+                lista_vc_xemt.append(
+                    os.path.join(
+                        "/opt/sao/appsharedfiles/L0F01/workspace/inputDir/", f_name
+                    )
+                    )
+        return lista_vc_xemt
     def adec_xeml0f(self):
         """
         This method performs the adec_xeml0f operation.
@@ -185,7 +198,7 @@ class ProcessL0(ProcessBase):
         dest_parametters_files = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_l0f_input")
         )
-        lista_vc_xemt = []
+        
         get_ras_files = self.ras_files(
            dest_parametters_files
         )
@@ -194,16 +207,7 @@ class ProcessL0(ProcessBase):
    
         )
         real_dtt_path = self.get_real_dttl_path(get_dttl_file)
-        for filename in get_ras_files:
-            f_name = os.path.basename(filename)
-            if re.match(
-                r"S1[AB]_OPER_SAR_RAS____\w+_VC[1-9]_", f_name
-            ) and filename.endswith(".xemt"):
-                lista_vc_xemt.append(
-                    os.path.join(
-                        "/opt/sao/appsharedfiles/L0F01/workspace/inputDir/", f_name
-                    )
-                )
+        lista_vc_xemt = self.__filter_ras()
         dir_to_templates = os.path.join(
             self.workspace_path, "templates", "templates_l0"
         )
