@@ -110,7 +110,7 @@ class ProcessL0(ProcessBase):
         xml_files = [f for f in dttl_files if f.endswith("xml")]
 
 
-        self.check_file_existence()
+        self.check_file_existence(xemt_files,xml_files)
         recent_files = self.find_recent_files(xemt_files)
         recent_files.extend(self.find_recent_files(xml_files))
         # Encuentra el archivo xemt con el valor máximo en la posición 11 después de dividir el nombre del archivo
@@ -207,7 +207,7 @@ class ProcessL0(ProcessBase):
    
         )
         real_dtt_path = self.get_real_dttl_path(get_dttl_file)
-        lista_vc_xemt = self.__filter_ras()
+        lista_vc_xemt = self.__filter_ras(get_ras_files)
         dir_to_templates = os.path.join(
             self.workspace_path, "templates", "templates_l0"
         )
@@ -215,7 +215,7 @@ class ProcessL0(ProcessBase):
         log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
         th.render_ras_file(
             lista_vc_xemt,
-            real_dtt_path[1],
+            real_dtt_path[0],
             "parameterFile.xml",
             os.path.join(dest_parametters_files, "parameterFile.xml"),
         )
