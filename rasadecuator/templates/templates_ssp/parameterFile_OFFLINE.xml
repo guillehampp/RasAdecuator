@@ -44,8 +44,6 @@
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_QC.xemt</value>
       <idProduct></idProduct>
     </output>
-
-
     <output>
       <name>SAOCOM SAR L1B Product</name>
       <type>XPNetStringNotTimeTagged</type>
@@ -64,7 +62,6 @@
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1b_QC.xemt</value>
       <idProduct></idProduct>
     </output>
-
     <output>
       <name>SAOCOM SAR L1C Product</name>
       <type>XPNetStringNotTimeTagged</type>
@@ -83,8 +80,6 @@
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1c_QC.xemt</value>
       <idProduct></idProduct>
     </output>
-
-
     <output>
       <name>SAOCOM SAR L1D Product</name>
       <type>XPNetStringNotTimeTagged</type>
