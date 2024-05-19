@@ -8,6 +8,7 @@ from rasadecuator.ArgumentHandler import ArgumentHandler
 from rasadecuator.FileHandler import FileHandler
 from rasadecuator.Log import Log
 from rasadecuator.YamlLoader import YamlLoader
+from rasadecuator.helper import Helper
 
 log_adec = Log(__name__)
 TOOLDIR = os.path.dirname(os.path.abspath(__file__))
@@ -30,27 +31,7 @@ def load_config():
     return loader.load()
 
 
-def get_sat_platform(path_to_adq):
-    """
-    Get the name of the platform from the DTTL file.
 
-    Args:
-        path_to_adq (str): The path to the acquisition.
-
-    Returns:
-        str: The name of the platform.
-
-    Raises:
-        FileNotFoundError: If no DTTL file is found in the given path.
-    """
-    get_dtt_file = glob.glob(os.path.join(path_to_adq, "*DTTL*"))
-    if not get_dtt_file:
-        error_message = f"No se encontró ningún archivo DTTL en {path_to_adq}"
-        log_adec.error(error_message)
-        raise FileNotFoundError(error_message)
-    for dtt_file in get_dtt_file:
-        platform = os.path.basename(dtt_file).split("_")[0]
-    return platform
 
 
 def check_tar_exists(workdir,config_params):
@@ -118,7 +99,7 @@ def main():
         log_adec.info(f"Adecuando adquisicion: {adquisition}")
         path_to_adq = os.path.abspath(os.path.join(args.path,adquisition))
         log_adec.info(f"Path to adquisition: {path_to_adq}")
-        platform = get_sat_platform(path_to_adq)
+        platform = Helper.get_sat_platform(path_to_adq)
         log_adec.info(f"Platform: {platform}")
         prepare_folder(config_params, path_to_adq)
         adec_processor = AdecProcessor(
