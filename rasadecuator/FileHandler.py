@@ -54,20 +54,29 @@ class FileHandler:
                 shutil.copy2(src_file, dst_file)
                 log_adec.info(f"Content copied from {src_file} to {dst_file}")
 
+    # def create_folder_structure(self):
+    #     log_adec.info(f"Creating folder structure for {self.path_to_adq}")
+    #     template_dir = self.config_params.get("workspace_template_dir")
+    #     full_template_path = os.path.join(self.file_path, template_dir)
+    #     file_handler = FileHandler(full_template_path)
+    #     try:
+    #         file_handler.copy_folder_content(self.path_to_adq)
+    #     except Exception as e:
+    #         error_message = f"Error al crear la estructura en {self.path_to_adq} desde {full_template_path}: {e}"
+    #         log_adec.error(error_message)
+    #         raise FolderCreationError(self.path_to_adq, full_template_path, e)
+    #     else:
+    #         log_adec.info(f"Se ha creado la carpeta {self.path_to_adq}")
+    #         return True
     def create_folder_structure(self):
-        log_adec.info(f"Creating folder structure for {self.path_to_adq}")
-        template_dir = self.config_params.get("workspace_template_dir")
-        full_template_path = os.path.join(self.file_path, template_dir)
-        file_handler = FileHandler(full_template_path)
-        try:
-            file_handler.copy_folder_content(self.path_to_adq)
-        except Exception as e:
-            error_message = f"Error al crear la estructura en {self.path_to_adq} desde {full_template_path}: {e}"
-            log_adec.error(error_message)
-            raise FolderCreationError(self.path_to_adq, full_template_path, e)
-        else:
-            log_adec.info(f"Se ha creado la carpeta {self.path_to_adq}")
-            return True
+        folder_structure = self.config_params['folder_structure']['Workspaces']
+        log_adec.info(f"Creating folder structure for {folder_structure}")
+        log_adec.info(f"Creating folder structure in {self.file_path}")
+        for workspace, directories in folder_structure.items():
+            for directory in directories.values():
+                log_adec.info(f"Creating folder {directory} in {workspace}")
+                folder_path = os.path.join(self.file_path, workspace, directory)
+                os.makedirs(folder_path, exist_ok=True)
 
     def create_log_folder(self):
         log_folder = os.path.join(self.file_path, "log")

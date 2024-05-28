@@ -37,7 +37,18 @@ class ProcessTMD(ProcessBase):
             path_to_adq,
             platform,
         )
-
+    def __filter_v0_xemt(self, workdir_tmd):
+        lista_vc0_xemt = []
+        for filename in os.listdir(workdir_tmd):
+            if re.match(f"{self.platform}_OPER_SAR_RAS__.*_VC0_.*\.xemt$", filename):
+                lista_vc0_xemt.append(
+                    os.path.join(
+                        "/opt/sao/appsharedfiles/TMD01/workspace/inputDir/", filename
+                    )
+                )
+                log_adec.info(f"Se encontro el archivo {filename}")
+        return lista_vc0_xemt
+    
     def adec_xemtmd(self):
         """
         Process TMD files.
@@ -56,15 +67,7 @@ class ProcessTMD(ProcessBase):
         workdir_tmd = os.path.join(
             self.path_to_adq, self.config_params.get("workspace_tmd_input")
         )
-        lista_vc0_xemt = []
-        for filename in os.listdir(workdir_tmd):
-            if re.match(f"{self.platform}_OPER_SAR_RAS__.*_VC0_.*\.xemt$", filename):
-                lista_vc0_xemt.append(
-                    os.path.join(
-                        "/opt/sao/appsharedfiles/TMD01/workspace/inputDir/", filename
-                    )
-                )
-                log_adec.info(f"Se encontro el archivo {filename}")
+        lista_vc0_xemt = self.__filter_v0_xemt(workdir_tmd)
         log_adec.info(f"Creando archivo parameterFile.xml en {workdir_tmd}")
         if not lista_vc0_xemt:
             log_adec.error("No se encontraron archivos VC0")
