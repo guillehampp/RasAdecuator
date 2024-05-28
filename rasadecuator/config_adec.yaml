@@ -13,15 +13,15 @@ folder_structure:
     workspaceL0F:
       inputDir: inputDir
       outputDir: outputDir
-      logDir: log
+      logDir: logs
       statusDir: statusDir
     workspaceTMD:
       inputDir: inputDir
       outputDir: outputDir
-      logDir: log
+      logDir: logs
       statusDir: statusDir
     workspaceSSP:
       inputDir: inputDir
       outputDir: outputDir
-      logDir: log
+      logDir: logs
       statusDir: statusDir

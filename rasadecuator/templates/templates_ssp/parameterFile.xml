@@ -44,7 +44,7 @@
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a_QC.xemt</value>
       <idProduct></idProduct>
     </output>
-        <output>
+    <output>
       <name>SAOCOM SAR L1B Product</name>
       <type>XPNetStringNotTimeTagged</type>
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1b.xemt</value>

@@ -56,9 +56,10 @@ def prepare_folder(config_params, path_to_adq):
         config_params (object): The configuration parameters.
         path_to_adq (str): The path to the acquisition.
     """
+    log_adec.info(f"Busca si existen archivos tar en  {path_to_adq}")
     if not check_tar_exists(path_to_adq,config_params):
         file_handler = FileHandler(
-            TOOLDIR, config_params=config_params, adq_id=None, path_to_adq=path_to_adq
+            path_to_adq, config_params=config_params, adq_id=None, path_to_adq=path_to_adq
         )
         if file_handler.create_folder_structure():
             log_adec.info(f"Se ha creado la carpeta {path_to_adq}")
@@ -99,7 +100,8 @@ def main():
         log_adec.info(f"Adecuando adquisicion: {adquisition}")
         path_to_adq = os.path.abspath(os.path.join(args.path,adquisition))
         log_adec.info(f"Path to adquisition: {path_to_adq}")
-        platform = Helper.get_sat_platform(path_to_adq)
+        hpl = Helper()
+        platform = hpl.get_sat_platform(path_to_adq)
         log_adec.info(f"Platform: {platform}")
         prepare_folder(config_params, path_to_adq)
         adec_processor = AdecProcessor(

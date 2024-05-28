@@ -70,10 +70,14 @@ class FileHandler:
     #         return True
     def create_folder_structure(self):
         folder_structure = self.config_params['folder_structure']['Workspaces']
-        for folder in folder_structure:
-            folder_path = os.path.join(self.file_path, folder)
-            if not os.path.exists(folder_path):
-                os.mkdir(folder_path)
+        log_adec.info(f"Creating folder structure for {folder_structure}")
+        log_adec.info(f"Creating folder structure in {self.file_path}")
+        for workspace, directories in folder_structure.items():
+            for directory in directories.values():
+                log_adec.info(f"Creating folder {directory} in {workspace}")
+                folder_path = os.path.join(self.file_path, workspace, directory)
+                os.makedirs(folder_path, exist_ok=True)
+
     def create_log_folder(self):
         log_folder = os.path.join(self.file_path, "log")
         if not os.path.exists(log_folder):
