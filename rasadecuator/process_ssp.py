@@ -72,6 +72,95 @@ class ProcessSSP(ProcessBase):
                     most_recent_file = file
 
         return most_recent_file
+    def file_patterns(self, platform):
+        """
+        Get the file patterns for the SSP files.
+
+        Args:
+            platform (str): The platform name.
+
+        Returns:
+            dict: The file patterns.
+        """
+        return {
+            "o": f"{platform}_OPER_ODF_QUATRN_CODS_*_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt",
+            "r": f"{platform}_OPER_ODF_EPHEMS_CODS_*_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt",
+            "f": f"{platform}_OPER_ODF_EPHEMS_CODS_*_DENSEORBEPHEM_MJ2K_XYZ_F_1.xemt",
+            "teigr": f"{platform}_OPER_ODF_TECIGR_CORE_*.xemt",
+        }
+    def get_recent_files(self, file_patterns, dest_parametters_files):
+        matching_files = {}
+        for key, pattern in file_patterns:
+            if files := glob.glob(os.path.join(dest_parametters_files, pattern)):
+                matching_files[key] = self._get_most_recent_file(files)
+    def render_parameter_file(th, matching_files, dest_parametters_files, product_type):
+        log_adec.info("Creating parameterFile.xml")
+        th.render_ssp_input(
+            "parameterFile.xml",
+            os.path.join(dest_parametters_files, "parameterFile.xml"),
+            matching_files["o"],
+            matching_files["r"],
+            product_type
+        )
+        log_adec.info("Creating parameterFile_OFFLINEFAST.xml")
+        th.render_ssp_offline_fast(
+            "parameterFile_OFFLINEFAST.xml",
+            os.path.join(dest_parametters_files, "parameterFile_OFFLINEFAST.xml"),
+            matching_files["o"],
+            matching_files["r"],
+            product_type
+        )
+        log_adec.info("Creating parameterFile_ARG2.xml")
+        th.render_arg2(
+            "parameterFile_ARG2.xml",
+            os.path.join(dest_parametters_files, "parameterFile_ARG2.xml"),
+            matching_files["o"],
+            matching_files["r"],
+            product_type
+        )
+    def render_parameter_file_offline(th, matching_files, dest_parametters_files, product_type):
+        log_adec.info("Creating parameterFile_OFFLINE.xml")
+        th.render_ssp_offline(
+            "parameterFile_OFFLINE.xml",
+            os.path.join(dest_parametters_files, "parameterFile_OFFLINE.xml"),
+            matching_files["o"],
+            matching_files["f"],
+            product_type
+        )
+        log_adec.info("Creating parameterFile_OFFLINEFASTFINAL.xml")
+        th.render_offline_fast_final(
+            "parameterFile_OFFLINEFASTFINAL.xml",
+            os.path.join(
+                dest_parametters_files, "parameterFile_OFFLINEFASTFINAL.xml"
+            ),
+            matching_files["o"],
+            matching_files["f"],
+            product_type
+        )
+    def render_parameter_file_arg3(th, matching_files, dest_parametters_files, product_type):
+        log_adec.info("Creating parameterFile_ARG3.xml")
+        th.render_arg3(
+            "parameterFile_ARG3.xml",
+            os.path.join(dest_parametters_files, "parameterFile_ARG3.xml"),
+            matching_files["o"],
+            matching_files["f"],
+            matching_files["teigr"],
+            product_type
+        )
+    def render_online_very_fast(th, dest_parametters_files, product_type):
+        log_adec.info("Creating parameterFile_ONLINEVERYFAST.xml")
+        th.render_online_very_fast(
+            "parameterFile_ONLINEVERYFAST.xml",
+            os.path.join(dest_parametters_files, "parameterFile_ONLINEVERYFAST.xml"),
+            product_type
+        )
+    def render_arg1(th, dest_parametters_files, product_type):
+        log_adec.info("Creating parameterFile_ARG1.xml")
+        th.render_arg1(
+            "parameterFile_ARG1.xml",
+            os.path.join(dest_parametters_files, "parameterFile_ARG1.xml"),
+            product_type
+        )
 
     def adec_ssp_parametter_file(self, platform,product_type):
         """
@@ -88,93 +177,25 @@ class ProcessSSP(ProcessBase):
         )
         th = TemplateHandler(dir_to_templates)
 
-        file_patterns = [
-            (
-                "o",
-                f"{platform}_OPER_ODF_QUATRN_CODS_*_AOCSKF_ITPLROTATION_MJ2K2SAT_Q_O_1.xemt",
-            ),
-            ("r", f"{platform}_OPER_ODF_EPHEMS_CODS_*_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt"),
-            ("f", f"{platform}_OPER_ODF_EPHEMS_CODS_*_DENSEORBEPHEM_MJ2K_XYZ_F_1.xemt"),
-            ("teigr", f"{platform}_OPER_ODF_TECIGR_CORE_*.xemt"),
-        ]
+        file_patterns = self.file_patterns(platform)
 
-        matching_files = {}
-        for key, pattern in file_patterns:
-            if files := glob.glob(os.path.join(dest_parametters_files, pattern)):
-                matching_files[key] = self._get_most_recent_file(files)
+        matching_files = self.get_recent_files(file_patterns, dest_parametters_files)
 
         if "o" in matching_files and "r" in matching_files:
-            log_adec.info("Creating parameterFile.xml")
-            th.render_ssp_input(
-                "parameterFile.xml",
-                os.path.join(dest_parametters_files, "parameterFile.xml"),
-                matching_files["o"],
-                matching_files["r"],
-                product_type
-            )
-            log_adec.info("Creating parameterFile_OFFLINEFAST.xml")
-            th.render_ssp_offline_fast(
-                "parameterFile_OFFLINEFAST.xml",
-                os.path.join(dest_parametters_files, "parameterFile_OFFLINEFAST.xml"),
-                matching_files["o"],
-                matching_files["r"],
-                product_type
-            )
-            log_adec.info("Creating parameterFile_ARG2.xml")
-            th.render_arg2(
-                "parameterFile_ARG2.xml",
-                os.path.join(dest_parametters_files, "parameterFile_ARG2.xml"),
-                matching_files["o"],
-                matching_files["r"],
-                product_type
-            )
+            self.render_parameter_file(th, matching_files, dest_parametters_files, product_type)
 
         if "o" in matching_files and "f" in matching_files:
-            log_adec.info("Creating parameterFile_OFFLINE.xml")
-            th.render_ssp_offline(
-                "parameterFile_OFFLINE.xml",
-                os.path.join(dest_parametters_files, "parameterFile_OFFLINE.xml"),
-                matching_files["o"],
-                matching_files["f"],
-                product_type
-            )
-            log_adec.info("Creating parameterFile_OFFLINEFASTFINAL.xml")
-            th.render_offline_fast_final(
-                "parameterFile_OFFLINEFASTFINAL.xml",
-                os.path.join(
-                    dest_parametters_files, "parameterFile_OFFLINEFASTFINAL.xml"
-                ),
-                matching_files["o"],
-                matching_files["f"],
-                product_type
-            )
+            self.render_parameter_file_offline(th, matching_files, dest_parametters_files, product_type)
+
 
         if (
             "o" in matching_files
             and "f" in matching_files
             and "teigr" in matching_files
         ):
-            log_adec.info("Creating parameterFile_ARG3.xml")
-            th.render_arg3(
-                "parameterFile_ARG3.xml",
-                os.path.join(dest_parametters_files, "parameterFile_ARG3.xml"),
-                matching_files["o"],
-                matching_files["f"],
-                matching_files["teigr"],
-                product_type
-            )
-        log_adec.info("Creating parameterFile_ONLINEVERYFAST.xml")
-        th.render_online_very_fast(
-            "parameterFile_ONLINEVERYFAST.xml",
-            os.path.join(dest_parametters_files, "parameterFile_ONLINEVERYFAST.xml"),
-            product_type
-        )
-        log_adec.info("Creating parameterFile_ARG1.xml")
-        th.render_arg1(
-            "parameterFile_ARG1.xml",
-            os.path.join(dest_parametters_files, "parameterFile_ARG1.xml"),
-            product_type
-        )
+            self.render_parameter_file_arg3(th, matching_files, dest_parametters_files, product_type)
+        self.render_online_very_fast(th, dest_parametters_files, product_type)
+        self.render_arg1(th, dest_parametters_files, product_type)
 
         for file in matching_files.values():
             log_adec.info(f"The most recent file is {file}")
