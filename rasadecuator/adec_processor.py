@@ -5,16 +5,17 @@ from rasadecuator.process_l0 import ProcessL0
 from rasadecuator.process_ssp import ProcessSSP
 from rasadecuator.process_tmd import ProcessTMD
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 
 
 class AdecProcessor:
-    def __init__(self, workdir, config_params, adquisition, path_to_adq, platform):
+    def __init__(self, workdir, config_params, adquisition, path_to_adq, platform,args):
         self.workdir = workdir
         self.config_params = config_params
         self.adquisition = adquisition
         self.path_to_adq = path_to_adq
         self.platform = platform
+        self.args = args
 
     def input_files_tmd(self):
         return_code = 0
@@ -23,7 +24,7 @@ class AdecProcessor:
             config_params=self.config_params,
             adq_id=self.adquisition,
             path_to_adq=self.path_to_adq,
-            platform=self.platform,
+            platform=self.platform
         )
         log_adec.info("Moving .vc0 files to TMD input folder")
         vc0_files = adec_tmd.find_files("*_VC0_*")
@@ -73,7 +74,6 @@ class AdecProcessor:
             adq_id=self.adquisition,
             path_to_adq=self.path_to_adq,
         )
-        
         ephems = adec_ssp.find_files(self.platform + "_*_*_EPHEMS_*")
         #S1A_OPER_ODF_EPHEMS_CODS_20231206T221828_DENSEORBEPHEM_MJ2K_XYZ_R_1.xemt
 
@@ -84,5 +84,9 @@ class AdecProcessor:
             self.path_to_adq, self.config_params.get("workspace_ssp_input")
         )
         log_adec.info(f"Moving SSP files to {dest_input_file_ssp}")
+
+
         adec_ssp.move_files(all_files, dest_input_file_ssp)
-        adec_ssp.adec_ssp_parametter_file(self.platform)
+        for p in self.args.product_type:
+            log_adec.info(f"Product type: {p}")
+        adec_ssp.adec_ssp_parametter_file(self.platform,self.args.product_type)

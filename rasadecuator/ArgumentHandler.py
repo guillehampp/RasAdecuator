@@ -2,7 +2,7 @@ import argparse
 
 from rasadecuator.Log import Log
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 
 
 class ArgumentHandler:
@@ -26,6 +26,12 @@ class ArgumentHandler:
             type=str,
             help="Path a la lista de adquisiciones",
             required=True,
+        )
+        self.parser.add_argument(
+            "-t",
+            "--product-type",
+            type=lambda s: [item.strip() for item in s.split(',')], # convierto los productos de los parametros en una lista
+            help="Lista de productos a crear, pueden ser L1A, L1B,L1C, L1D, deben ir sin espacios y separados por una coma"
         )
 
 

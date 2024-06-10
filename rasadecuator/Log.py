@@ -10,7 +10,7 @@ class Log:
         logger (logging.Logger): The logger object for logging messages.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, destino):
         """
         Initializes a Log object.
 
@@ -21,10 +21,11 @@ class Log:
         # create logger
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
+        self.destino = destino
 
         # create file handler and set level to debug
         current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        fh = logging.FileHandler(f"log/adecuator_log_{current_time}.log")
+        fh = logging.FileHandler(f"{self.destino}/adecuator_log_{current_time}.log")
         fh.setLevel(logging.DEBUG)
 
         # create formatter

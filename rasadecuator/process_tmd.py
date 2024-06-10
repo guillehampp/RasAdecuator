@@ -5,7 +5,7 @@ from rasadecuator.Log import Log
 from rasadecuator.process_base import ProcessBase
 from rasadecuator.templates import TemplateHandler
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 
 
 class ProcessTMD(ProcessBase):

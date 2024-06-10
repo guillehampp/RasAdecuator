@@ -8,7 +8,7 @@ from rasadecuator.Log import Log
 from rasadecuator.process_base import ProcessBase
 from rasadecuator.templates import TemplateHandler
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 
 
 class ProcessSSP(ProcessBase):
@@ -73,7 +73,7 @@ class ProcessSSP(ProcessBase):
 
         return most_recent_file
 
-    def adec_ssp_parametter_file(self, platform):
+    def adec_ssp_parametter_file(self, platform,product_type):
         """
         Adecuate the SSP parameter file.
 
@@ -110,6 +110,7 @@ class ProcessSSP(ProcessBase):
                 os.path.join(dest_parametters_files, "parameterFile.xml"),
                 matching_files["o"],
                 matching_files["r"],
+                product_type
             )
             log_adec.info("Creating parameterFile_OFFLINEFAST.xml")
             th.render_ssp_offline_fast(
@@ -117,6 +118,7 @@ class ProcessSSP(ProcessBase):
                 os.path.join(dest_parametters_files, "parameterFile_OFFLINEFAST.xml"),
                 matching_files["o"],
                 matching_files["r"],
+                product_type
             )
             log_adec.info("Creating parameterFile_ARG2.xml")
             th.render_arg2(
@@ -124,6 +126,7 @@ class ProcessSSP(ProcessBase):
                 os.path.join(dest_parametters_files, "parameterFile_ARG2.xml"),
                 matching_files["o"],
                 matching_files["r"],
+                product_type
             )
 
         if "o" in matching_files and "f" in matching_files:
@@ -133,6 +136,7 @@ class ProcessSSP(ProcessBase):
                 os.path.join(dest_parametters_files, "parameterFile_OFFLINE.xml"),
                 matching_files["o"],
                 matching_files["f"],
+                product_type
             )
             log_adec.info("Creating parameterFile_OFFLINEFASTFINAL.xml")
             th.render_offline_fast_final(
@@ -142,6 +146,7 @@ class ProcessSSP(ProcessBase):
                 ),
                 matching_files["o"],
                 matching_files["f"],
+                product_type
             )
 
         if (
@@ -156,16 +161,19 @@ class ProcessSSP(ProcessBase):
                 matching_files["o"],
                 matching_files["f"],
                 matching_files["teigr"],
+                product_type
             )
         log_adec.info("Creating parameterFile_ONLINEVERYFAST.xml")
         th.render_online_very_fast(
             "parameterFile_ONLINEVERYFAST.xml",
             os.path.join(dest_parametters_files, "parameterFile_ONLINEVERYFAST.xml"),
+            product_type
         )
         log_adec.info("Creating parameterFile_ARG1.xml")
         th.render_arg1(
             "parameterFile_ARG1.xml",
             os.path.join(dest_parametters_files, "parameterFile_ARG1.xml"),
+            product_type
         )
 
         for file in matching_files.values():

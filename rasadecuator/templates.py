@@ -2,7 +2,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from rasadecuator.Log import Log
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 
 
 class TemplateHandler:
@@ -38,19 +38,20 @@ class TemplateHandler:
             autoescape=select_autoescape(["html", "xml"]),
         )
 
-    def render_template(self, template_name, parameters):
+    def render_template(self, template_name, parameters, product_type=None):
         """
         Renders a template with the given parameters.
 
         Args:
             template_name (str): The name of the template file.
             parameters (list): A list of dictionaries containing the parameters for the template.
+            product_type (str, optional): The type of the product. Defaults to None.
 
         Returns:
             str: The rendered template as a string.
         """
         template = self.env.get_template(template_name)
-        return template.render(parameters=parameters)
+        return template.render(parameters=parameters, outputs=product_type)
 
     def render_tmd_files(self, files, template_name, output_name):
         """
@@ -102,7 +103,7 @@ class TemplateHandler:
             f.write(output)
 
     def render_ssp_input(
-        self, template_name, output_name, att_product, precision_product
+        self, template_name, output_name, att_product, precision_product,product_type
     ):
         """
         Renders SSP input using a template and writes the output to a file.
@@ -128,12 +129,12 @@ class TemplateHandler:
                 "value": precision_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
         with open(output_name, "w") as f:
             f.write(output)
 
     def render_ssp_offline(
-        self, template_name, output_name, att_product, precision_product
+        self, template_name, output_name, att_product, precision_product,product_type
     ):
         """
         Renders SSP offline using a template and writes the output to a file.
@@ -153,7 +154,7 @@ class TemplateHandler:
                 "value": att_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
 
         parameters.append(
             {
@@ -162,13 +163,13 @@ class TemplateHandler:
                 "value": precision_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
 
     def render_ssp_offline_fast(
-        self, template_name, output_name, att_product, precision_product
+        self, template_name, output_name, att_product, precision_product,product_type
     ):
         """
         Renders SSP offline fast using a template and writes the output to a file.
@@ -188,7 +189,7 @@ class TemplateHandler:
                 "value": att_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
 
         parameters.append(
             {
@@ -197,13 +198,13 @@ class TemplateHandler:
                 "value": precision_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
 
     def render_offline_fast_final(
-        self, template_name, output_name, att_product, precision_product
+        self, template_name, output_name, att_product, precision_product,product_type
     ):
         """
         Renders offline fast final using a template and writes the output to a file.
@@ -223,7 +224,7 @@ class TemplateHandler:
                 "value": att_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
 
         parameters.append(
             {
@@ -232,12 +233,12 @@ class TemplateHandler:
                 "value": precision_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
 
-    def render_offline_very_fast(self, template_name, output_name):
+    def render_offline_very_fast(self, template_name, output_name,product_type):
         """
         Renders offline very fast using a template and writes the output to a file.
 
@@ -246,12 +247,12 @@ class TemplateHandler:
             output_name (str): The name of the output file.
         """
         outputs = []
-        output = self.render_template(template_name, "")
+        output = self.render_template(template_name, "",product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
 
-    def render_online_very_fast(self, template_name, output_name):
+    def render_online_very_fast(self, template_name, output_name,product_type):
         """
         Renders online very fast using a template and writes the output to a file.
 
@@ -260,12 +261,12 @@ class TemplateHandler:
             output_name (str): The name of the output file.
         """
         outputs = []
-        output = self.render_template(template_name, "")
+        output = self.render_template(template_name, "",product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
 
-    def render_arg1(self, template_name, output_name):
+    def render_arg1(self, template_name, output_name,product_type):
         """
         Renders a template with no arguments and writes the output to a file.
 
@@ -274,12 +275,12 @@ class TemplateHandler:
             output_name (str): The name of the output file.
         """
         outputs = []
-        output = self.render_template(template_name, "")
+        output = self.render_template(template_name, "",product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
 
-    def render_arg2(self, template_name, output_name, att_product, precision_product):
+    def render_arg2(self, template_name, output_name, att_product, precision_product,product_type):
         """
         Renders a template with two arguments and writes the output to a file.
 
@@ -298,7 +299,7 @@ class TemplateHandler:
                 "value": att_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
 
         parameters.append(
             {
@@ -307,7 +308,7 @@ class TemplateHandler:
                 "value": precision_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)
@@ -319,6 +320,7 @@ class TemplateHandler:
         att_product,
         precision_product,
         total_electron_content,
+        product_type
     ):
         """
         Renders a template with three arguments and writes the output to a file.
@@ -339,7 +341,7 @@ class TemplateHandler:
                 "value": att_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
 
         parameters.append(
             {
@@ -348,7 +350,7 @@ class TemplateHandler:
                 "value": precision_product,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
 
         parameters.append(
             {
@@ -357,7 +359,7 @@ class TemplateHandler:
                 "value": total_electron_content,
             }
         )
-        output = self.render_template(template_name, parameters)
+        output = self.render_template(template_name, parameters,product_type)
         outputs.append(output)
         with open(output_name, "a") as f:
             f.write(output)

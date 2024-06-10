@@ -10,7 +10,7 @@ from rasadecuator.Log import Log
 from rasadecuator.YamlLoader import YamlLoader
 from rasadecuator.helper import Helper
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 TOOLDIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -93,7 +93,7 @@ def main():
     config_params = load_config()
     handler = ArgumentHandler()
     args = handler.get_arguments()
-
+    print(args)
     acquisition_folder = file_handler.open_txt_(args.lista_adquisiciones)
     return_code = []
     for adquisition in acquisition_folder:
@@ -105,7 +105,7 @@ def main():
         log_adec.info(f"Platform: {platform}")
         prepare_folder(config_params, path_to_adq)
         adec_processor = AdecProcessor(
-            TOOLDIR, config_params, adquisition, path_to_adq, platform
+            TOOLDIR, config_params, adquisition, path_to_adq, platform, args
         )
         log_adec.info("Start adecuating TMD files")
         ret_code = adec_processor.input_files_tmd()

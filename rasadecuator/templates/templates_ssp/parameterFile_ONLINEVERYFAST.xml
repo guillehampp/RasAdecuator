@@ -19,7 +19,27 @@
   </inputs>
   <workDirectory>/opt/sao/appsharedfiles/SSP01/workspace</workDirectory>
   <outputs>
+    {% for output in outputs %}
     <output>
+      <name>SAOCOM SAR L1{{ output|upper }} Product</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1{{ output }}.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1{{ output|upper }} Product Annotated</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1{{ output }}_an.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    <output>
+      <name>SAOCOM SAR L1{{ output|upper }} Product QC</name>
+      <type>XPNetStringNotTimeTagged</type>
+      <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1{{ output }}_QC.xemt</value>
+      <idProduct></idProduct>
+    </output>
+    {% endfor %} 
+    <!-- <output>
       <name>SAOCOM SAR L1A Product</name>
       <type>XPNetStringNotTimeTagged</type>
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1a.xemt</value>
@@ -90,6 +110,6 @@
       <type>XPNetStringNotTimeTagged</type>
       <value>/opt/sao/appsharedfiles/SSP01/workspace/outputDir/l1d_QC.xemt</value>
       <idProduct></idProduct>
-    </output>
+    </output> -->
   </outputs>
 </parameters>

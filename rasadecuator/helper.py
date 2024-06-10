@@ -2,7 +2,7 @@ import os
 import glob
 from rasadecuator.Log import Log
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 class Helper():
     def __init__(self):
         self.helper = None

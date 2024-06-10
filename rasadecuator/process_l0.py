@@ -6,7 +6,7 @@ from rasadecuator.Log import Log
 from rasadecuator.process_base import ProcessBase
 from rasadecuator.templates import TemplateHandler
 
-log_adec = Log(__name__)
+log_adec = Log(__name__, "/home/administrator/disk2tb/retriever/descarga_adquisiciones")
 
 
 class ProcessL0(ProcessBase):
@@ -215,7 +215,7 @@ class ProcessL0(ProcessBase):
         log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
         th.render_ras_file(
             lista_vc_xemt,
-            real_dtt_path[0],
+            real_dtt_path[1],
             "parameterFile.xml",
             os.path.join(dest_parametters_files, "parameterFile.xml"),
         )
