@@ -78,15 +78,31 @@ class ProcessL0(ProcessBase):
         except ValueError as e:
             log_adec.error(e)
             raise
-    def find_recent_files(self,lo_files):
+    def find_recent_files(self, lo_files):
         recent_files = []
 
-        # Encuentra el archivo xemt con el valor máximo en la posición 11 después de dividir el nombre del archivo
-        if lo_files:
-            recent_xemt_file = max(
-                lo_files, key=lambda filename: re.split("_", filename)[10]
-            )
-            recent_files.append(recent_xemt_file)
+        # Divide los nombres de los archivos en partes y extrae la fecha
+        file_parts = [re.split("_", filename) for filename in lo_files]
+        dates = [parts[11] for parts in file_parts]
+
+        # Encuentra la fecha más reciente
+        recent_date = max(dates)
+
+        # Encuentra el archivo .xemt y .xml con la fecha más reciente
+        recent_xemt = None
+        recent_xml = None
+        for parts in file_parts:
+            if parts[11] == recent_date:
+                if parts[-1].endswith('.xemt') and recent_xemt is None:
+                    recent_xemt = "_".join(parts)
+                elif parts[-1].endswith('.xml') and recent_xml is None:
+                    recent_xml = "_".join(parts)
+
+        if recent_xemt is not None:
+            recent_files.append(recent_xemt)
+        if recent_xml is not None:
+            recent_files.append(recent_xml)
+
         return recent_files
 
     def get_recent_files(self, dttl_files):
@@ -213,9 +229,11 @@ class ProcessL0(ProcessBase):
         )
         th = TemplateHandler(dir_to_templates)
         log_adec.info(f"Creando archivo parameterFile.xml en {dest_parametters_files}")
+        log_adec.info(f"real_dtt_path es {real_dtt_path}")
+        xemt_file = [path for path in real_dtt_path if path.endswith('.xemt')][0]
         th.render_ras_file(
             lista_vc_xemt,
-            real_dtt_path[1],
+            xemt_file,
             "parameterFile.xml",
             os.path.join(dest_parametters_files, "parameterFile.xml"),
         )

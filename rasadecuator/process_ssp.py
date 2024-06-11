@@ -90,10 +90,13 @@ class ProcessSSP(ProcessBase):
         }
     def get_recent_files(self, file_patterns, dest_parametters_files):
         matching_files = {}
-        for key, pattern in file_patterns:
+        for key, pattern in file_patterns.items():
             if files := glob.glob(os.path.join(dest_parametters_files, pattern)):
                 matching_files[key] = self._get_most_recent_file(files)
-    def render_parameter_file(th, matching_files, dest_parametters_files, product_type):
+        return matching_files
+
+    
+    def render_parameter_file(self,th, matching_files, dest_parametters_files, product_type):
         log_adec.info("Creating parameterFile.xml")
         th.render_ssp_input(
             "parameterFile.xml",
@@ -118,7 +121,7 @@ class ProcessSSP(ProcessBase):
             matching_files["r"],
             product_type
         )
-    def render_parameter_file_offline(th, matching_files, dest_parametters_files, product_type):
+    def render_parameter_file_offline(self,th, matching_files, dest_parametters_files, product_type):
         log_adec.info("Creating parameterFile_OFFLINE.xml")
         th.render_ssp_offline(
             "parameterFile_OFFLINE.xml",
@@ -137,7 +140,7 @@ class ProcessSSP(ProcessBase):
             matching_files["f"],
             product_type
         )
-    def render_parameter_file_arg3(th, matching_files, dest_parametters_files, product_type):
+    def render_parameter_file_arg3(self,th, matching_files, dest_parametters_files, product_type):
         log_adec.info("Creating parameterFile_ARG3.xml")
         th.render_arg3(
             "parameterFile_ARG3.xml",
@@ -147,14 +150,14 @@ class ProcessSSP(ProcessBase):
             matching_files["teigr"],
             product_type
         )
-    def render_online_very_fast(th, dest_parametters_files, product_type):
+    def render_online_very_fast(self,th, dest_parametters_files, product_type):
         log_adec.info("Creating parameterFile_ONLINEVERYFAST.xml")
         th.render_online_very_fast(
             "parameterFile_ONLINEVERYFAST.xml",
             os.path.join(dest_parametters_files, "parameterFile_ONLINEVERYFAST.xml"),
             product_type
         )
-    def render_arg1(th, dest_parametters_files, product_type):
+    def render_arg1(self, th, dest_parametters_files, product_type):
         log_adec.info("Creating parameterFile_ARG1.xml")
         th.render_arg1(
             "parameterFile_ARG1.xml",
@@ -176,9 +179,9 @@ class ProcessSSP(ProcessBase):
             self.path_to_adq, self.config_params.get("workspace_ssp_input")
         )
         th = TemplateHandler(dir_to_templates)
-
+        log_adec.info(f"La plataforma en adec_ssp_parametter_file es {platform}")
         file_patterns = self.file_patterns(platform)
-
+        log_adec.info(file_patterns)
         matching_files = self.get_recent_files(file_patterns, dest_parametters_files)
 
         if "o" in matching_files and "r" in matching_files:
